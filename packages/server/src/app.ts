@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 
+import { PassThrough } from 'stream';
+
 import Koa from 'koa';
 import cors from '@koa/cors';
 import bodyParser from 'koa-bodyparser';
@@ -32,92 +34,98 @@ app.use(async (ctx, next) => {
 });
 
 router.all('/graphql', async ctx => {
-  const { dataloaders, req, res, request, response } = ctx;
-  req.body = req.body || request.body;
+  const request = {
+    body: ctx.request.body,
+    headers: ctx.req.headers,
+    method: ctx.request.method,
+    query: ctx.request.query,
+  };
 
-  // Determine whether we should render GraphiQL instead of returning an API response
-  if (shouldRenderGraphiQL(req)) {
-    response.type = 'text/html';
-    response.body = renderGraphiQL();
+  if (shouldRenderGraphiQL(request)) {
+    ctx.type = 'text/html';
+    ctx.body = renderGraphiQL();
   } else {
-    // Extract the GraphQL parameters from the request
-    const { operationName, query, variables } = getGraphQLParameters(req);
+    const { operationName, query, variables } = getGraphQLParameters(request);
 
-    // Validate and execute the query
     const result = await processRequest({
       operationName,
       query,
       variables,
       request,
       schema,
-      contextFactory: () => ({ dataloaders, koaContext: ctx }),
+      contextFactory: () => ({ dataloaders: ctx.dataloaders, koaContext: ctx }),
     });
 
-    // processRequest returns one of three types of results depending on how the server should respond
-    // 1) RESPONSE: a regular JSON payload
-    // 2) MULTIPART RESPONSE: a multipart response (when @stream or @defer directives are used)
-    // 3) PUSH: a stream of events to push back down the client for a subscription
     if (result.type === 'RESPONSE') {
-      // We set the provided status and headers and just the send the payload back to the client
-      result.headers.forEach(({ name, value }) => response.set(name, value));
-      response.type = 'application/json';
-      response.body = result.payload;
-    } else if (result.type === 'MULTIPART_RESPONSE') {
-      // Indicate we're sending a multipart response
-      response.set({
+      result.headers.forEach(({ name, value }) => ctx.response.set(name, value));
+      ctx.status = result.status;
+      ctx.body = result.payload;
+    } else if (result.type === 'PUSH') {
+      ctx.req.socket.setTimeout(0);
+      ctx.req.socket.setNoDelay(true);
+      ctx.req.socket.setKeepAlive(true);
+
+      ctx.set({
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      });
+
+      const stream = new PassThrough();
+
+      stream.on('close', () => {
+        result.unsubscribe();
+      });
+
+      ctx.status = 200;
+      ctx.body = stream;
+
+      result.subscribe(result => {
+        stream.write(`data: ${JSON.stringify(result)}\n\n`);
+      });
+    } else {
+      ctx.req.socket.setTimeout(0);
+      ctx.req.socket.setNoDelay(true);
+      ctx.req.socket.setKeepAlive(true);
+
+      ctx.set({
         Connection: 'keep-alive',
         'Content-Type': 'multipart/mixed; boundary="-"',
         'Transfer-Encoding': 'chunked',
       });
 
-      // If the request is closed by the client, we unsubscribe and stop executing the request
-      res.on('close', () => {
+      const stream = new PassThrough();
+
+      stream.on('close', () => {
         result.unsubscribe();
       });
 
-      response.body = '---';
+      ctx.status = 200;
+      ctx.body = stream;
 
-      // Subscribe and send back each result as a separate chunk. We await the subscribe
-      // call. Once we're done executing the request and there are no more results to send
-      // to the client, the Promise returned by subscribe will resolve and we can end the response.
-      await result.subscribe(result => {
-        const chunk = Buffer.from(JSON.stringify(result), 'utf8');
-        const data = [
-          '',
-          'Content-Type: application/json; charset=utf-8',
-          'Content-Length: ' + String(chunk.length),
-          '',
-          chunk,
-        ];
+      stream.write('---');
 
-        if (result.hasNext) {
-          data.push('---');
-        }
+      result
+        .subscribe(result => {
+          const chunk = Buffer.from(JSON.stringify(result), 'utf8');
+          const data = [
+            '',
+            'Content-Type: application/json; charset=utf-8',
+            'Content-Length: ' + String(chunk.length),
+            '',
+            chunk,
+          ];
 
-        res.write(data.join('\r\n'));
-      });
+          if (result.hasNext) {
+            data.push('---');
+          }
 
-      res.write('\r\n-----\r\n');
-      res.end();
-    } else {
-      console.log('subscription');
-
-      // Indicate we're sending an event stream to the client
-      response.set({
-        'Content-Type': 'text/event-stream',
-        Connection: 'keep-alive',
-        'Cache-Control': 'no-cache',
-      });
-
-      // If the request is closed by the client, we unsubscribe and stop executing the request
-      res.on('close', () => {
-        result.unsubscribe();
-      });
-
-      // We subscribe to the event stream and push any new events to the client
-      await result.subscribe(result => {
-        res.write(`data: ${JSON.stringify(result)}\n\n`);
-      });
+          stream.write(data.join('\r\n'));
+        })
+        .then(() => {
+          stream.write('\r\n-----\r\n');
+          stream.end();
+        });
     }
   }
 });
