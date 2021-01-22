@@ -21,12 +21,12 @@ const runServer = async () => {
     console.info(`\n🚀 Server started at ${PROTOCOL}://${GRAPHQL_HOST}:${GRAPHQL_PORT}`);
 
     if (!isProduction) {
-      console.info(`\n🎠 GraphQL Playground available at ${PROTOCOL}://${GRAPHQL_HOST}:${GRAPHQL_PORT}/playground\n`);
+      console.info(`🎠 GraphQL Playground available at ${PROTOCOL}://${GRAPHQL_HOST}:${GRAPHQL_PORT}/playground\n`);
     }
   });
 };
 
 (async () => {
-  console.log('\n📡 Server starting...');
+  console.log('📡 Server starting...');
   await runServer();
 })();

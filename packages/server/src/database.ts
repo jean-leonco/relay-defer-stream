@@ -19,7 +19,7 @@ export const connectDatabase = () => {
       })
       .once('open', () => {
         const infos = mongoose.connections;
-        infos.map(info => console.log(`\n⛓️  Connected to ${info.host}:${info.port}/${info.name}`));
+        infos.map(info => console.log(`⛓️  Connected to ${info.host}:${info.port}/${info.name}`));
         resolve(mongoose.connections[0]);
       });
 

@@ -1,10 +1,6 @@
 const cluster = require('cluster');
 const path = require('path');
 
-const { HotModuleReplacementPlugin } = require('webpack');
-
-const common = require('./webpack.common');
-
 class ReloadServerPlugin {
   constructor({ script }) {
     this.done = null;
@@ -42,16 +38,4 @@ class ReloadServerPlugin {
   }
 }
 
-module.exports = {
-  ...common,
-  mode: 'development',
-  devtool: 'eval-cheap-source-map',
-  watch: true,
-  plugins: [
-    ...common.plugins,
-    new ReloadServerPlugin({
-      script: path.resolve('build', 'server.js'),
-    }),
-    new HotModuleReplacementPlugin(),
-  ],
-};
+module.exports = ReloadServerPlugin;

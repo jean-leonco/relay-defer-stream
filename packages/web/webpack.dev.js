@@ -3,12 +3,12 @@ const path = require('path');
 const { HotModuleReplacementPlugin } = require('webpack');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
-const common = require('./webpack.common');
+const { web } = require('@workspace/webpack');
 
 const PORT = 8001;
 
 module.exports = {
-  ...common,
+  ...web,
   mode: 'development',
   devtool: 'eval-cheap-source-map',
   devServer: {
@@ -19,5 +19,5 @@ module.exports = {
     port: PORT,
     publicPath: '/',
   },
-  plugins: [...common.plugins, new ReactRefreshWebpackPlugin(), new HotModuleReplacementPlugin()],
+  plugins: [...web.plugins, new ReactRefreshWebpackPlugin(), new HotModuleReplacementPlugin()],
 };

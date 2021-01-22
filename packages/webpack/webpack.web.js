@@ -5,17 +5,25 @@ const WebpackDotEnv = require('dotenv-webpack');
 const HappyPack = require('happypack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const indexHtml = require('./src/index.html');
+// @TODO - add better way to import template html
+const indexHtml = require('../web/src/index.html');
+
+const cwd = process.cwd();
+
+const src = path.resolve(cwd, 'src');
 
 const packages = ['relay'];
+const packagesPath = packages.map(pkg => path.resolve(cwd, '..', pkg));
 
+// @TODO - move babel-loader to swc-loader
 module.exports = {
+  context: cwd,
   stats: 'errors-only',
   entry: {
-    app: ['./src/index.tsx'],
+    app: [path.resolve(src, 'index.tsx')],
   },
   output: {
-    path: path.resolve('build'),
+    path: path.resolve(cwd, 'build'),
     filename: 'bundle.js',
     publicPath: '/',
   },
@@ -36,7 +44,7 @@ module.exports = {
         test: /\.(js|jsx|ts|tsx)?$/,
         exclude: [/node_modules/],
         use: 'happypack/loader',
-        include: [path.resolve('src'), ...packages.map(pkg => path.resolve(__dirname, `../${pkg}`))],
+        include: [src, ...packagesPath],
       },
 
       // Images: Copy image files to build folder
