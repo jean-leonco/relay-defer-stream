@@ -1,0 +1,38 @@
+{
+  "name": "@workspace/web",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "main": "build/index.js",
+  "module": "src/index.ts",
+  "scripts": {
+    "relay": "relay-compiler",
+    "start": "webpack serve --progress --config webpack.config.js"
+  },
+  "dependencies": {
+    "@workspace/relay": "^0.1.0",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-relay": "0.0.0-experimental-0b967d2e",
+    "react-router-dom": "^5.2.0",
+    "relay-runtime": "10.1.2",
+    "styled-components": "^5.2.0"
+  },
+  "devDependencies": {
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "@types/react-dom": "^17.0.0",
+    "@types/react-relay": "7.0.17",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/relay-runtime": "10.1.7",
+    "@types/styled-components": "^5.1.3",
+    "clean-webpack-plugin": "^3.0.0",
+    "dotenv-webpack": "^6.0.0",
+    "happypack": "^5.0.1",
+    "html-webpack-plugin": "^5.0.0-beta.5",
+    "react-refresh": "^0.9.0",
+    "relay-compiler": "10.1.2",
+    "relay-compiler-language-typescript": "13.0.2",
+    "relay-config": "10.1.2",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

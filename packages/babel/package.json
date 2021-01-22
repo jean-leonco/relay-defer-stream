@@ -1,0 +1,26 @@
+{
+  "name": "@workspace/babel",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "main": "src/index.js",
+  "dependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.8",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-proposal-async-generator-functions": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-export-default-from": "^7.10.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.10.4",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+    "@babel/plugin-transform-async-to-generator": "^7.10.4",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "@babel/preset-typescript": "^7.12.7",
+    "babel-loader": "^8.2.1",
+    "babel-plugin-relay": "^10.0.1",
+    "babel-plugin-styled-components": "^1.12.0"
+  }
+}

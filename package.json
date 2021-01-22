@@ -1,0 +1,36 @@
+{
+  "name": "relay-defer-stream",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Jean Leonço"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "db:seed": "yarn workspace @workspace/server seed",
+    "delete:generated": "find . -name \"__generated__\" -exec rm -rf '{}' +",
+    "delete:node_modules": "find . -name \"node_modules\" -exec rm -rf '{}' +",
+    "graphql": "yarn workspace @workspace/server graphql",
+    "relay": "yarn workspace @workspace/web relay",
+    "startup": "./scripts/startup.sh",
+    "update": "yarn update-schema && yarn relay",
+    "update-schema": "yarn workspace @workspace/server update-schema",
+    "web": "yarn workspace @workspace/web start"
+  },
+  "resolutions": {
+    "graphql": "15.4.0-experimental-stream-defer.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^4.1.2",
+    "webpack": "5.17.0",
+    "webpack-cli": "4.4.0"
+  }
+}
