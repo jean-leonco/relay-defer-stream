@@ -20,7 +20,7 @@ const Schema = new mongoose.Schema(
   {
     collection: 'Comment',
     timestamps: true,
-  }
+  },
 );
 
 export interface IComment extends Document, IDefaultSchema {

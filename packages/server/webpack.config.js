@@ -14,7 +14,7 @@ class ReloadServerPlugin {
       exec: path.resolve(process.cwd(), script),
     });
 
-    cluster.on('online', (worker) => {
+    cluster.on('online', worker => {
       this.workers.push(worker);
 
       if (this.done) {
@@ -24,24 +24,21 @@ class ReloadServerPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.afterEmit.tap(
-      { name: 'reload-server' },
-      (compilation, callback) => {
-        this.done = callback;
-        this.workers.forEach((worker) => {
-          try {
-            process.kill(worker.process.pid, 'SIGTERM');
-          } catch (e) {
-            // eslint-disable-next-line
-            console.warn(`Unable to kill process #${worker.process.pid}`);
-          }
-        });
+    compiler.hooks.afterEmit.tap({ name: 'reload-server' }, (compilation, callback) => {
+      this.done = callback;
+      this.workers.forEach(worker => {
+        try {
+          process.kill(worker.process.pid, 'SIGTERM');
+        } catch (e) {
+          // eslint-disable-next-line
+          console.warn(`Unable to kill process #${worker.process.pid}`);
+        }
+      });
 
-        this.workers = [];
+      this.workers = [];
 
-        cluster.fork();
-      }
-    );
+      cluster.fork();
+    });
   }
 }
 
@@ -51,6 +48,7 @@ module.exports = {
   devtool: 'eval-cheap-source-map',
   watch: true,
   plugins: [
+    ...common.plugins,
     new ReloadServerPlugin({
       script: path.resolve('build', 'server.js'),
     }),

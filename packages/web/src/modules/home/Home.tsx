@@ -12,7 +12,7 @@ const Home = () => {
         ...PostList_query
       }
     `,
-    {}
+    {},
   );
 
   return <PostList query={data} />;

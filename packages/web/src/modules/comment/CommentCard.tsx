@@ -18,17 +18,14 @@ interface CommentCardProps {
   query: CommentCard_Comment$key;
 }
 
-const CommentCard = (
-  props: CommentCardProps,
-  ref: React.ForwardedRef<HTMLDivElement>
-) => {
+const CommentCard = (props: CommentCardProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   const data = useFragment<CommentCard_Comment$key>(
     graphql`
       fragment CommentCard_Comment on Comment {
         body
       }
     `,
-    props.query
+    props.query,
   );
 
   return (

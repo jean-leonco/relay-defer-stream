@@ -6,8 +6,8 @@ export interface SpaceProps {
 }
 
 const Space = styled.div<SpaceProps>`
-  ${(p) => (p.width ? `width: ${p.width.toFixed()}px;` : '')}
-  ${(p) => (p.height ? `height: ${p.height.toFixed()}px;` : '')}
+  ${p => (p.width ? `width: ${p.width.toFixed()}px;` : '')}
+  ${p => (p.height ? `height: ${p.height.toFixed()}px;` : '')}
 `;
 
 export default Space;

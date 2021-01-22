@@ -1,6 +1,7 @@
 const path = require('path');
 
 const WebpackNodeExternals = require('webpack-node-externals');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const packages = [];
 
@@ -40,11 +41,9 @@ module.exports = {
         test: /\.(js|jsx|ts|tsx)?$/,
         use: 'babel-loader',
         exclude: [/node_modules/],
-        include: [
-          path.resolve('src'),
-          ...packages.map((pkg) => path.resolve(__dirname, `../${pkg}`)),
-        ],
+        include: [path.resolve('src'), ...packages.map(pkg => path.resolve(__dirname, `../${pkg}`))],
       },
     ],
   },
+  plugins: [new CleanWebpackPlugin()],
 };

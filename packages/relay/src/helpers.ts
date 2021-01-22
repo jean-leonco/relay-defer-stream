@@ -1,26 +1,16 @@
-import {
-  CacheConfig,
-  GraphQLResponse,
-  QueryResponseCache,
-  RequestParameters,
-  Variables,
-} from 'relay-runtime';
+import { CacheConfig, GraphQLResponse, QueryResponseCache, RequestParameters, Variables } from 'relay-runtime';
+
 import fetchQuery from './fetchQuery';
 
-export const isMutation = (request: RequestParameters) =>
-  request.operationKind === 'mutation';
+export const isMutation = (request: RequestParameters) => request.operationKind === 'mutation';
 
-export const isQuery = (request: RequestParameters) =>
-  request.operationKind === 'query';
+export const isQuery = (request: RequestParameters) => request.operationKind === 'query';
 
-export const forceFetch = (cacheConfig: CacheConfig) =>
-  !!(cacheConfig && cacheConfig.force);
+export const forceFetch = (cacheConfig: CacheConfig) => !!(cacheConfig && cacheConfig.force);
 
 export const GRAPHQL_URL = process.env.GRAPHQL_URL!;
 
-export const handleData = (
-  response: Response
-): Promise<GraphQLResponse | string> => {
+export const handleData = (response: Response): Promise<GraphQLResponse | string> => {
   const contentType = response.headers.get('content-type');
   if (contentType && contentType.indexOf('application/json') !== -1) {
     return response.json();
@@ -29,10 +19,7 @@ export const handleData = (
   return response.text();
 };
 
-export const getRequestBody = (
-  request: RequestParameters,
-  variables: Variables
-) => {
+export const getRequestBody = (request: RequestParameters, variables: Variables) => {
   return JSON.stringify({
     name: request.name,
     query: request.text,
@@ -45,11 +32,7 @@ export const relayResponseCache = new QueryResponseCache({
   ttl: 60 * 1000,
 });
 
-export const cacheHandler = async (
-  request: RequestParameters,
-  variables: Variables,
-  cacheConfig: CacheConfig
-) => {
+export const cacheHandler = async (request: RequestParameters, variables: Variables, cacheConfig: CacheConfig) => {
   const queryID = request.text!;
 
   if (isMutation(request)) {

@@ -6,7 +6,7 @@ const loaders: {
 
 const registerLoader = <Name extends keyof GraphQLDataloaders>(
   key: Name,
-  getLoader: () => GraphQLDataloaders[Name]
+  getLoader: () => GraphQLDataloaders[Name],
 ) => {
   loaders[key] = getLoader as any;
 };
@@ -17,7 +17,7 @@ const getDataloaders = (): GraphQLDataloaders =>
       ...prev,
       [loaderKey]: loaders[loaderKey](),
     }),
-    {}
+    {},
   ) as any;
 
 export { registerLoader, getDataloaders };

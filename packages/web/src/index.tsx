@@ -28,5 +28,5 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  rootElement
+  rootElement,
 );

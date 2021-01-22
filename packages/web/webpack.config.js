@@ -19,9 +19,5 @@ module.exports = {
     port: PORT,
     publicPath: '/',
   },
-  plugins: [
-    ...common.plugins,
-    new ReactRefreshWebpackPlugin(),
-    new HotModuleReplacementPlugin(),
-  ],
+  plugins: [...common.plugins, new ReactRefreshWebpackPlugin(), new HotModuleReplacementPlugin()],
 };

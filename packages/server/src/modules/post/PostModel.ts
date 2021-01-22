@@ -12,7 +12,7 @@ const PostSchema = new mongoose.Schema(
   {
     collection: 'Post',
     timestamps: true,
-  }
+  },
 );
 
 export interface IPost extends Document, IDefaultSchema {

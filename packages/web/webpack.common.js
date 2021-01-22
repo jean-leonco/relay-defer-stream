@@ -36,10 +36,7 @@ module.exports = {
         test: /\.(js|jsx|ts|tsx)?$/,
         exclude: [/node_modules/],
         use: 'happypack/loader',
-        include: [
-          path.resolve('src'),
-          ...packages.map((pkg) => path.resolve(__dirname, `../${pkg}`)),
-        ],
+        include: [path.resolve('src'), ...packages.map(pkg => path.resolve(__dirname, `../${pkg}`))],
       },
 
       // Images: Copy image files to build folder

@@ -13,23 +13,16 @@ interface CommentListProps {
   shouldEnablePagination?: boolean;
 }
 
-const CommentList = ({
-  shouldEnablePagination = true,
-  ...props
-}: CommentListProps) => {
+const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListProps) => {
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
     CommentListPaginationQuery,
     CommentList_post$key
   >(
     graphql`
       fragment CommentList_post on Post
-        @argumentDefinitions(
-          first: { type: Int, defaultValue: 3 }
-          after: { type: String }
-        )
+        @argumentDefinitions(first: { type: Int, defaultValue: 3 }, after: { type: String })
         @refetchable(queryName: "CommentListPaginationQuery") {
-        comments(first: $first, after: $after)
-          @connection(key: "CommentList_comments") {
+        comments(first: $first, after: $after) @connection(key: "CommentList_comments") {
           edges {
             node {
               id
@@ -39,22 +32,17 @@ const CommentList = ({
         }
       }
     `,
-    props.query
+    props.query,
   );
 
   const renderComment = useCallback(
-    ({ edge, ref }) => (
-      <CommentCard key={edge.node.id} query={edge.node} ref={ref} />
-    ),
-    []
+    ({ edge, ref }) => <CommentCard key={edge.node.id} query={edge.node} ref={ref} />,
+    [],
   );
 
   const comments = useMemo(
-    () =>
-      shouldEnablePagination
-        ? []
-        : data.comments.edges.map((edge) => renderComment({ edge })),
-    [data.comments.edges, renderComment, shouldEnablePagination]
+    () => (shouldEnablePagination ? [] : data.comments.edges.map(edge => renderComment({ edge }))),
+    [data.comments.edges, renderComment, shouldEnablePagination],
   );
 
   if (!data.comments.edges) {

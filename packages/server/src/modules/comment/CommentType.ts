@@ -1,10 +1,6 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
 import { globalIdField } from 'graphql-relay';
-import {
-  objectIdResolver,
-  timestampResolver,
-  connectionDefinitions,
-} from '@entria/graphql-mongo-helpers';
+import { objectIdResolver, timestampResolver, connectionDefinitions } from '@entria/graphql-mongo-helpers';
 
 import { nodeInterface, registerTypeLoader } from '../loader/typeRegister';
 
@@ -24,7 +20,7 @@ const CommentType = new GraphQLObjectType<IComment, GraphQLContext>({
     ...objectIdResolver,
     body: {
       type: GraphQLString,
-      resolve: (data) => data.body,
+      resolve: data => data.body,
     },
     post: {
       type: PostType,

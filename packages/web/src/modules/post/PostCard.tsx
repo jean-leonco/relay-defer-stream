@@ -30,10 +30,7 @@ interface PostCardProps {
   query: PostCard_post$key;
 }
 
-const PostCard = (
-  props: PostCardProps,
-  ref: React.ForwardedRef<HTMLAnchorElement>
-) => {
+const PostCard = (props: PostCardProps, ref: React.ForwardedRef<HTMLAnchorElement>) => {
   const data = useFragment<PostCard_post$key>(
     graphql`
       fragment PostCard_post on Post {
@@ -42,7 +39,7 @@ const PostCard = (
         ...CommentList_post
       }
     `,
-    props.query
+    props.query,
   );
 
   return (

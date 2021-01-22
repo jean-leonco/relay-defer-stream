@@ -33,11 +33,11 @@ const getTypeRegister = () => {
 
       return (load && load(context, id)) || null;
     },
-    (obj) => {
+    obj => {
       const { type } = typesLoaders[obj.constructor.name] || { type: null };
 
       return type;
-    }
+    },
   );
 
   return {
@@ -49,11 +49,6 @@ const getTypeRegister = () => {
   };
 };
 
-const {
-  registerTypeLoader,
-  nodeInterface,
-  nodeField,
-  nodesField,
-} = getTypeRegister();
+const { registerTypeLoader, nodeInterface, nodeField, nodesField } = getTypeRegister();
 
 export { registerTypeLoader, nodeInterface, nodeField, nodesField };

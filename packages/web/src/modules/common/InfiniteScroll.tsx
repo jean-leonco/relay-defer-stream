@@ -5,7 +5,7 @@ import Text from './Text';
 interface RenderItemProps {
   edge: any;
   index: number;
-  ref?: (node: Element) => void | React.MutableRefObject<any> | null;
+  ref: ((node: Element) => void) | null;
 }
 
 interface InfiniteScrollProps {
@@ -16,13 +16,7 @@ interface InfiniteScrollProps {
   isLoading: boolean;
 }
 
-const InfiniteScroll = ({
-  data,
-  renderItem,
-  loadNext,
-  hasNext,
-  isLoading,
-}: InfiniteScrollProps) => {
+const InfiniteScroll = ({ data, renderItem, loadNext, hasNext, isLoading }: InfiniteScrollProps) => {
   const observer = useRef<IntersectionObserver>();
 
   const lastItemRef = useCallback(
@@ -37,7 +31,7 @@ const InfiniteScroll = ({
           threshold: 0.6,
         };
 
-        observer.current = new IntersectionObserver((entries) => {
+        observer.current = new IntersectionObserver(entries => {
           if (entries[0].isIntersecting && hasNext && !isLoading) {
             loadNext(10);
           }
@@ -46,7 +40,7 @@ const InfiniteScroll = ({
         observer.current.observe(node);
       }
     },
-    [isLoading, loadNext]
+    [hasNext, isLoading, loadNext],
   );
 
   const renderCard = useCallback(
@@ -59,7 +53,7 @@ const InfiniteScroll = ({
 
       return node;
     },
-    [data.length, renderItem, lastItemRef]
+    [data.length, renderItem, lastItemRef],
   );
 
   const cards = useMemo(() => data.map(renderCard), [data, renderCard]);

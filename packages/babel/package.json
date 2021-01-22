@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "index.js",
   "dependencies": {
     "@babel/cli": "^7.12.8",
     "@babel/core": "^7.12.8",

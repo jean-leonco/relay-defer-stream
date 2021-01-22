@@ -1,10 +1,6 @@
 import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
-import {
-  errorField,
-  getObjectId,
-  successField,
-} from '@entria/graphql-mongo-helpers';
+import { errorField, getObjectId, successField } from '@entria/graphql-mongo-helpers';
 
 import * as PostLoader from '../../post/PostLoader';
 
@@ -29,10 +25,7 @@ const mutation = mutationWithClientMutationId({
       type: GraphQLNonNull(GraphQLString),
     },
   },
-  mutateAndGetPayload: async (
-    args: CommentAddMutationArgs,
-    context: GraphQLContext
-  ) => {
+  mutateAndGetPayload: async (args: CommentAddMutationArgs, context: GraphQLContext) => {
     const objectId = getObjectId(args.post);
 
     if (!objectId) {

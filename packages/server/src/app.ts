@@ -6,12 +6,7 @@ import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import Router from '@koa/router';
 import { koaPlayground } from 'graphql-playground-middleware';
-import {
-  getGraphQLParameters,
-  processRequest,
-  shouldRenderGraphiQL,
-  renderGraphiQL,
-} from 'graphql-helix';
+import { getGraphQLParameters, processRequest, shouldRenderGraphiQL, renderGraphiQL } from 'graphql-helix';
 
 import { KoaContext } from './types';
 import schema from './schema/schema';
@@ -23,7 +18,7 @@ const router = new Router<any, KoaContext>();
 app.use(bodyParser());
 app.use(cors({ maxAge: 86400, origin: '*' }));
 
-app.on('error', (error) => {
+app.on('error', error => {
   console.error('Error while answering request', { error });
 });
 
@@ -36,7 +31,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-router.all('/graphql', async (ctx) => {
+router.all('/graphql', async ctx => {
   const { dataloaders, req, res, request, response } = ctx;
   req.body = req.body || request.body;
 
@@ -85,7 +80,7 @@ router.all('/graphql', async (ctx) => {
       // Subscribe and send back each result as a separate chunk. We await the subscribe
       // call. Once we're done executing the request and there are no more results to send
       // to the client, the Promise returned by subscribe will resolve and we can end the response.
-      await result.subscribe((result) => {
+      await result.subscribe(result => {
         const chunk = Buffer.from(JSON.stringify(result), 'utf8');
         const data = [
           '',
@@ -120,7 +115,7 @@ router.all('/graphql', async (ctx) => {
       });
 
       // We subscribe to the event stream and push any new events to the client
-      await result.subscribe((result) => {
+      await result.subscribe(result => {
         res.write(`data: ${JSON.stringify(result)}\n\n`);
       });
     }

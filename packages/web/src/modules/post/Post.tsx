@@ -39,7 +39,7 @@ const Post = () => {
         }
       }
     `,
-    { id }
+    { id },
   );
 
   if (!post) {

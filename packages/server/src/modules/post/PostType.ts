@@ -26,13 +26,12 @@ const PostType = new GraphQLObjectType<IPost, GraphQLContext>({
     ...objectIdResolver,
     content: {
       type: GraphQLString,
-      resolve: (post) => post.content,
+      resolve: post => post.content,
     },
     comments: {
       type: GraphQLNonNull(CommentConnection.connectionType),
       args: connectionArgs,
-      resolve: async (post, args, context) =>
-        CommentLoader.loadAll(context, withFilter(args, { post: post._id })),
+      resolve: async (post, args, context) => CommentLoader.loadAll(context, withFilter(args, { post: post._id })),
     },
     ...timestampResolver,
   }),
