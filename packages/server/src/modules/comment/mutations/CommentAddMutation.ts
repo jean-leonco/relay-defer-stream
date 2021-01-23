@@ -2,9 +2,11 @@ import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
 import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 import { errorField, getObjectId, successField } from '@entria/graphql-mongo-helpers';
 
-import * as PostLoader from '../../post/PostLoader';
-
 import { GraphQLContext } from '../../../types';
+
+import pubSub, { EVENTS } from '../../../pubSub';
+
+import * as PostLoader from '../../post/PostLoader';
 
 import CommentModel from '../CommentModel';
 import * as CommentLoader from '../CommentLoader';
@@ -20,9 +22,11 @@ const mutation = mutationWithClientMutationId({
   inputFields: {
     post: {
       type: GraphQLNonNull(GraphQLID),
+      description: 'The post Global Id.',
     },
     body: {
       type: GraphQLNonNull(GraphQLString),
+      description: 'The comment body.',
     },
   },
   mutateAndGetPayload: async (args: CommentAddMutationArgs, context: GraphQLContext) => {
@@ -48,6 +52,8 @@ const mutation = mutationWithClientMutationId({
       post: post._id,
       body: args.body,
     });
+
+    await pubSub.publish(`${args.post}${EVENTS.COMMENT.NEW}`, { commentId: comment._id, postId: args.post });
 
     return {
       id: comment._id,

@@ -1,4 +1,13 @@
-import { CacheConfig, GraphQLResponse, QueryResponseCache, RequestParameters, Variables } from 'relay-runtime';
+import {
+  CacheConfig,
+  GraphQLResponse,
+  QueryResponseCache,
+  RequestParameters,
+  Variables,
+  Observable,
+  SubscribeFunction,
+} from 'relay-runtime';
+import { Subscription } from 'sse-z';
 
 import fetchQuery from './fetchQuery';
 
@@ -51,4 +60,20 @@ export const cacheHandler = async (request: RequestParameters, variables: Variab
   }
 
   return fromServer;
+};
+
+export const setupSubscription: SubscribeFunction = (operation, variables) => {
+  return Observable.create(sink => {
+    return new Subscription({
+      url: GRAPHQL_URL,
+      searchParams: {
+        operationName: operation.name,
+        query: operation.text!,
+        variables: JSON.stringify(variables),
+      },
+      onNext: data => {
+        sink.next(JSON.parse(data));
+      },
+    });
+  });
 };

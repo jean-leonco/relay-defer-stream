@@ -173,7 +173,25 @@ type CommentAddPayload {
 }
 
 input CommentAddInput {
+  """The post Global Id."""
   post: ID!
+
+  """The comment body."""
   body: String!
   clientMutationId: String
+}
+
+type Subscription {
+  CommentNew(input: CommentNewInput!): CommentNewPayload
+}
+
+type CommentNewPayload {
+  commentEdge: CommentEdge
+  clientSubscriptionId: String
+}
+
+input CommentNewInput {
+  """The post Global Id."""
+  post: ID!
+  clientSubscriptionId: String
 }

@@ -1,11 +1,11 @@
 import { GraphQLObjectType } from 'graphql';
 
-import CommentMutations from '../modules/comment/mutations';
+import CommentAdd from '../modules/comment/mutations/CommentAddMutation';
 
 const MutationType = new GraphQLObjectType({
   name: 'Mutation',
   fields: () => ({
-    ...CommentMutations,
+    CommentAdd,
   }),
 });
 
