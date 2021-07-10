@@ -8,7 +8,7 @@ export const connectDatabase = () => {
   return new Promise((resolve, reject) => {
     mongoose.Promise = global.Promise;
     mongoose.connection
-      .on('error', error => {
+      .on('error', (error) => {
         console.log('\n❌ ERROR: Connection to DB failed');
         reject(error);
       })
@@ -19,7 +19,7 @@ export const connectDatabase = () => {
       })
       .once('open', () => {
         const infos = mongoose.connections;
-        infos.map(info => console.log(`⛓️  Connected to ${info.host}:${info.port}/${info.name}`));
+        infos.map((info) => console.log(`⛓️  Connected to ${info.host}:${info.port}/${info.name}`));
         resolve(mongoose.connections[0]);
       });
 

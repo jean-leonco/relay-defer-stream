@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay/hooks';
 import { useParams } from 'react-router-dom';
 import { css } from 'styled-components';
@@ -34,7 +34,7 @@ const Post = () => {
         post: node(id: $id) {
           ... on Post {
             content
-            ...CommentList_post @arguments(first: 10)
+            ...CommentList_post @defer
           }
         }
       }
@@ -51,10 +51,13 @@ const Post = () => {
       <Space height={6} />
       <Text size="title">{post.content}</Text>
       <Flex css={spacerCss} />
-      <Text size="label" weight="semiBold">
-        Comments:
-      </Text>
-      <CommentList query={post} />
+
+      <Suspense fallback={'Loading comments...'}>
+        <Text size="label" weight="semiBold">
+          Comments:
+        </Text>
+        <CommentList query={post} />
+      </Suspense>
     </Flex>
   );
 };

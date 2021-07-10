@@ -27,15 +27,15 @@ const PostType = new GraphQLObjectType<IPost, GraphQLContext>({
     ...objectIdResolver,
     content: {
       type: GraphQLString,
-      resolve: post => post.content,
+      resolve: (post) => post.content,
     },
     comments: {
       type: GraphQLNonNull(CommentConnection.connectionType),
       args: connectionArgs,
       resolve: async (post, args, context) => {
         // Emulate a slow query for test purpose
-        const randomTimeout = faker.random.number({ min: 750, max: 2500 });
-        await new Promise(resolve => setTimeout(resolve, randomTimeout));
+        const randomTimeout = faker.datatype.number({ min: 750, max: 2500 });
+        await new Promise((resolve) => setTimeout(resolve, randomTimeout));
         return CommentLoader.loadAll(context, withFilter(args, { post: post._id }));
       },
     },

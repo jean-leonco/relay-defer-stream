@@ -11,7 +11,7 @@ const runScript = async () => {
 
   for (let i = 0; i < posts; i++) {
     const content = faker.lorem.paragraph().slice(0, 255);
-    const comments = faker.random.number(6);
+    const comments = faker.datatype.number(6);
 
     const post = await new PostModel({ content }).save();
 

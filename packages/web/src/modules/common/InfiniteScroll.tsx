@@ -31,7 +31,7 @@ const InfiniteScroll = ({ data, renderItem, loadNext, hasNext, isLoading }: Infi
           threshold: 0.6,
         };
 
-        observer.current = new IntersectionObserver(entries => {
+        observer.current = new IntersectionObserver((entries) => {
           if (entries[0].isIntersecting && hasNext && !isLoading) {
             loadNext(10);
           }

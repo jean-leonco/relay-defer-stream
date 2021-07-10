@@ -2,7 +2,6 @@ const path = require('path');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WebpackDotEnv = require('dotenv-webpack');
-const HappyPack = require('happypack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // @TODO - add better way to import template html
@@ -13,9 +12,8 @@ const cwd = process.cwd();
 const src = path.resolve(cwd, 'src');
 
 const packages = ['relay'];
-const packagesPath = packages.map(pkg => path.resolve(cwd, '..', pkg));
+const packagesPath = packages.map((pkg) => path.resolve(cwd, '..', pkg));
 
-// @TODO - move babel-loader to swc-loader
 module.exports = {
   context: cwd,
   stats: 'errors-only',
@@ -42,8 +40,8 @@ module.exports = {
       // Typescript and Javascript: Transpile and load using happypack
       {
         test: /\.(js|jsx|ts|tsx)?$/,
+        use: 'babel-loader?cacheDirectory=true',
         exclude: [/node_modules/],
-        use: 'happypack/loader',
         include: [src, ...packagesPath],
       },
 
@@ -63,13 +61,6 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new WebpackDotEnv({ path: './.env' }),
-    new HappyPack({
-      threads: 4,
-      verbose: false,
-      loaders: ['babel-loader?cacheDirectory=true'],
-    }),
-    new HtmlWebpackPlugin({
-      templateContent: indexHtml,
-    }),
+    new HtmlWebpackPlugin({ templateContent: indexHtml }),
   ],
 };

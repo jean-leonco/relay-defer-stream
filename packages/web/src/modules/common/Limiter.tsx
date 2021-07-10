@@ -4,7 +4,7 @@ import { css } from 'styled-components';
 import Flex, { FlexProps } from './Flex';
 
 const containerCss = css<LimiterProps>`
-  max-width: ${p => `${p.size}px`};
+  max-width: ${(p) => `${p.size}px`};
   width: 100%;
 `;
 

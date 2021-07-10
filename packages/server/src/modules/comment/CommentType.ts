@@ -20,7 +20,7 @@ const CommentType = new GraphQLObjectType<IComment, GraphQLContext>({
     ...objectIdResolver,
     body: {
       type: GraphQLString,
-      resolve: data => data.body,
+      resolve: (data) => data.body,
     },
     post: {
       type: PostType,

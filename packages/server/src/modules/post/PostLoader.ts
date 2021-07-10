@@ -4,7 +4,12 @@ import { registerLoader } from '../loader/loaderRegister';
 
 import PostModel from './PostModel';
 
-const { Wrapper: Post, getLoader, load, loadAll } = createLoader({
+const {
+  Wrapper: Post,
+  getLoader,
+  load,
+  loadAll,
+} = createLoader({
   model: PostModel,
   loaderName: 'PostLoader',
 });

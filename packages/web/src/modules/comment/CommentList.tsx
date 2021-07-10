@@ -21,8 +21,8 @@ const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListPro
   >(
     graphql`
       fragment CommentList_post on Post
-        @argumentDefinitions(first: { type: Int, defaultValue: 3 }, after: { type: String })
-        @refetchable(queryName: "CommentListPaginationQuery") {
+      @argumentDefinitions(first: { type: Int, defaultValue: 3 }, after: { type: String })
+      @refetchable(queryName: "CommentListPaginationQuery") {
         comments(first: $first, after: $after) @connection(key: "CommentList_comments") {
           edges {
             node {
@@ -42,11 +42,11 @@ const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListPro
   );
 
   const comments = useMemo(
-    () => (shouldEnablePagination ? [] : data.comments.edges.slice(0, 3).map(edge => renderComment({ edge }))),
-    [data.comments.edges, renderComment, shouldEnablePagination],
+    () => (shouldEnablePagination ? [] : data.comments?.edges.slice(0, 3).map((edge) => renderComment({ edge }))),
+    [data.comments?.edges, renderComment, shouldEnablePagination],
   );
 
-  if (!data.comments.edges) {
+  if (!data.comments?.edges) {
     return null;
   }
 

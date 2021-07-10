@@ -10,7 +10,7 @@ class ReloadServerPlugin {
       exec: path.resolve(process.cwd(), script),
     });
 
-    cluster.on('online', worker => {
+    cluster.on('online', (worker) => {
       this.workers.push(worker);
 
       if (this.done) {
@@ -22,7 +22,7 @@ class ReloadServerPlugin {
   apply(compiler) {
     compiler.hooks.afterEmit.tap({ name: 'reload-server' }, (compilation, callback) => {
       this.done = callback;
-      this.workers.forEach(worker => {
+      this.workers.forEach((worker) => {
         try {
           process.kill(worker.process.pid, 'SIGTERM');
         } catch (e) {

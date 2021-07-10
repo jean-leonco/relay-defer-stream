@@ -1,15 +1,23 @@
 import {
   CacheConfig,
-  GraphQLResponse,
-  QueryResponseCache,
   RequestParameters,
-  Variables,
   Observable,
   SubscribeFunction,
+  FetchFunction,
+  PayloadData,
 } from 'relay-runtime';
 import { Subscription } from 'sse-z';
+import { GraphQLError } from 'graphql';
+import { meros } from 'meros/browser';
 
-import fetchQuery from './fetchQuery';
+export interface ExecutionPatchResult<TData = { [key: string]: any }, TExtensions = { [key: string]: any }> {
+  errors?: ReadonlyArray<GraphQLError>;
+  data?: TData | null;
+  path?: ReadonlyArray<string | number>;
+  label?: string;
+  hasNext: boolean;
+  extensions?: TExtensions;
+}
 
 export const isMutation = (request: RequestParameters) => request.operationKind === 'mutation';
 
@@ -17,63 +25,72 @@ export const isQuery = (request: RequestParameters) => request.operationKind ===
 
 export const forceFetch = (cacheConfig: CacheConfig) => !!(cacheConfig && cacheConfig.force);
 
-export const GRAPHQL_URL = process.env.GRAPHQL_URL!;
-
-export const handleData = (response: Response): Promise<GraphQLResponse | string> => {
-  const contentType = response.headers.get('content-type');
-  if (contentType && contentType.indexOf('application/json') !== -1) {
-    return response.json();
-  }
-
-  return response.text();
-};
-
-export const getRequestBody = (request: RequestParameters, variables: Variables) => {
-  return JSON.stringify({
-    name: request.name,
-    query: request.text,
-    variables,
-  });
-};
-
-export const relayResponseCache = new QueryResponseCache({
-  size: 250,
-  ttl: 60 * 1000,
-});
-
-export const cacheHandler = async (request: RequestParameters, variables: Variables, cacheConfig: CacheConfig) => {
-  const queryID = request.text!;
-
-  if (isMutation(request)) {
-    relayResponseCache.clear();
-    return fetchQuery(request, variables);
-  }
-
-  const fromCache = relayResponseCache.get(queryID, variables);
-  if (isQuery(request) && fromCache !== null && !forceFetch(cacheConfig)) {
-    return fromCache;
-  }
-
-  const fromServer = await fetchQuery(request, variables);
-  if (fromServer) {
-    relayResponseCache.set(queryID, variables, fromServer);
-  }
-
-  return fromServer;
-};
-
 export const setupSubscription: SubscribeFunction = (operation, variables) => {
-  return Observable.create(sink => {
+  return Observable.create((sink) => {
     return new Subscription({
-      url: GRAPHQL_URL,
+      url: 'http://localhost:5001/graphql',
       searchParams: {
         operationName: operation.name,
         query: operation.text!,
         variables: JSON.stringify(variables),
       },
-      onNext: data => {
+      onNext: (data) => {
         sink.next(JSON.parse(data));
       },
     });
   });
 };
+
+export const fetchQuery: FetchFunction = (params, variables) => {
+  return Observable.create((sink) => {
+    (async () => {
+      const response = await fetch('http://localhost:5001/graphql', {
+        body: JSON.stringify({
+          query: params.text,
+          variables,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
+
+      const parts = await meros<ExecutionPatchResult>(response);
+
+      if (isAsyncIterable(parts)) {
+        for await (const part of parts) {
+          if (!part.json) {
+            sink.error(new Error('Failed to parse part as json.'));
+            break;
+          }
+
+          const { data, path, hasNext, label } = part.body;
+
+          if (hasNext)
+            sink.next({
+              data: data as PayloadData,
+              path: path as (string | number)[],
+              label,
+              extensions: {
+                is_final: !hasNext,
+              },
+            });
+        }
+      } else {
+        sink.next(await parts.json());
+      }
+
+      sink.complete();
+    })();
+  });
+};
+
+function isAsyncIterable(input: unknown): input is AsyncIterable<unknown> {
+  return (
+    typeof input === 'object' &&
+    input !== null &&
+    // Some browsers still don't have Symbol.asyncIterator implemented (iOS Safari)
+    // That means every custom AsyncIterable must be built using a AsyncGeneratorFunction (async function * () {})
+    ((input as any)[Symbol.toStringTag] === 'AsyncGenerator' || Symbol.asyncIterator in input)
+  );
+}

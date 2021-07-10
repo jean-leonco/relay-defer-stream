@@ -20,7 +20,7 @@ const router = new Router<any, KoaContext>();
 app.use(bodyParser());
 app.use(cors({ maxAge: 86400, origin: '*' }));
 
-app.on('error', error => {
+app.on('error', (error) => {
   console.error('Error while answering request', { error });
 });
 
@@ -33,7 +33,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-router.all('/graphql', async ctx => {
+router.all('/graphql', async (ctx) => {
   const request = {
     body: ctx.request.body,
     headers: ctx.req.headers,
@@ -80,7 +80,7 @@ router.all('/graphql', async ctx => {
       ctx.status = 200;
       ctx.body = stream;
 
-      result.subscribe(result => {
+      result.subscribe((result) => {
         stream.write(`data: ${JSON.stringify(result)}\n\n`);
       });
     } else {
@@ -106,7 +106,7 @@ router.all('/graphql', async ctx => {
       stream.write('---');
 
       result
-        .subscribe(result => {
+        .subscribe((result) => {
           const chunk = Buffer.from(JSON.stringify(result), 'utf8');
           const data = [
             '',

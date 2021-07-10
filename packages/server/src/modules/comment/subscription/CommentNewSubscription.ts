@@ -30,7 +30,7 @@ const CommentNewSubscription = subscriptionWithClientId<
       description: 'The post Global Id.',
     },
   },
-  subscribe: args => {
+  subscribe: (args) => {
     return pubSub.asyncIterator(`${args.post}${EVENTS.COMMENT.NEW}`);
   },
   outputFields: {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { graphql, useFragment } from 'react-relay/hooks';
 import { Link as RouterLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -36,7 +36,7 @@ const PostCard = (props: PostCardProps, ref: React.ForwardedRef<HTMLAnchorElemen
       fragment PostCard_post on Post {
         id
         content
-        ...CommentList_post
+        ...CommentList_post @defer
       }
     `,
     props.query,
@@ -48,8 +48,10 @@ const PostCard = (props: PostCardProps, ref: React.ForwardedRef<HTMLAnchorElemen
         <Space height={6} />
         <Text size="label">{data.content}</Text>
         <Flex css={spacerCss} />
-        <Text weight="semiBold">Comments:</Text>
-        <CommentList query={data} shouldEnablePagination={false} />
+        <Suspense fallback={'Loading comments...'}>
+          <Text weight="semiBold">Comments:</Text>
+          <CommentList query={data} shouldEnablePagination={false} />
+        </Suspense>
       </Flex>
     </Link>
   );

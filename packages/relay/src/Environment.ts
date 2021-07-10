@@ -1,16 +1,10 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 
-import { cacheHandler, setupSubscription } from './helpers';
-
-const network = Network.create(cacheHandler, setupSubscription);
-
-const store = new Store(new RecordSource(), {
-  gcReleaseBufferSize: 10,
-});
+import { setupSubscription, fetchQuery } from './helpers';
 
 const relayEnvironment = new Environment({
-  network,
-  store,
+  network: Network.create(fetchQuery, setupSubscription),
+  store: new Store(new RecordSource()),
 });
 
 export default relayEnvironment;

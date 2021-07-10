@@ -1,14 +1,14 @@
 const path = require('path');
 
-const WebpackNodeExternals = require('webpack-node-externals');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpackNodeExternals = require('webpack-node-externals');
 
 const cwd = process.cwd();
 
 const src = path.resolve(cwd, 'src');
 
 const packages = [];
-const packagesPath = packages.map(pkg => path.resolve(cwd, '..', pkg));
+const packagesPath = packages.map((pkg) => path.resolve(cwd, '..', pkg));
 
 module.exports = {
   context: cwd,
@@ -25,7 +25,8 @@ module.exports = {
     filename: 'server.js',
   },
   externals: [
-    WebpackNodeExternals({
+    webpackNodeExternals(),
+    webpackNodeExternals({
       modulesDir: path.resolve(cwd, '../../node_modules'),
       allowlist: [/@workspace/],
     }),
@@ -42,10 +43,10 @@ module.exports = {
         type: 'javascript/auto',
       },
 
-      // Typescript and Javascript: Transpile and load using swc-loader
+      // Typescript and Javascript: Transpile and load using babel-loader
       {
         test: /\.(js|jsx|ts|tsx)?$/,
-        use: 'swc-loader',
+        use: 'babel-loader?cacheDirectory=true',
         exclude: [/node_modules/],
         include: [src, ...packagesPath],
       },

@@ -22,8 +22,8 @@ const PostList = ({ query }: PostListProps) => {
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<PostListPaginationQuery, PostList_query$key>(
     graphql`
       fragment PostList_query on Query
-        @argumentDefinitions(first: { type: Int, defaultValue: 10 }, after: { type: String })
-        @refetchable(queryName: "PostListPaginationQuery") {
+      @argumentDefinitions(first: { type: Int, defaultValue: 10 }, after: { type: String })
+      @refetchable(queryName: "PostListPaginationQuery") {
         posts(first: $first, after: $after) @connection(key: "PostList_posts") {
           edges {
             node {
@@ -39,7 +39,7 @@ const PostList = ({ query }: PostListProps) => {
 
   const renderPost = useCallback(({ edge, ref }) => <PostCard key={edge.node.id} query={edge.node} ref={ref} />, []);
 
-  if (!data.posts.edges) {
+  if (!data.posts?.edges) {
     return <Text>Unable to fetch posts</Text>;
   }
 

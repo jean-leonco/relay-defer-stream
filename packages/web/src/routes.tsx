@@ -11,7 +11,7 @@ import Post from './modules/post/Post';
 const containerCss = css`
   height: 100%;
   width: 100%;
-  background: ${p => p.theme.colors.background};
+  background: ${(p) => p.theme.colors.background};
   margin: 0 auto;
 `;
 

@@ -3,11 +3,11 @@ import styled, { DefaultTheme, FlattenInterpolation, ThemedStyledProps } from 's
 
 const Container = styled.div<FlexProps>`
   display: flex;
-  flex-direction: ${p => p.direction};
-  ${p => p.justify && `justify-content: ${p.justify};`}
-  ${p => p.align && `align-items: ${p.align};`}
-  ${p => p.flex && `flex: ${p.flex};`}
-  ${p => p.css}
+  flex-direction: ${(p) => p.direction};
+  ${(p) => p.justify && `justify-content: ${p.justify};`}
+  ${(p) => p.align && `align-items: ${p.align};`}
+  ${(p) => p.flex && `flex: ${p.flex};`}
+  ${(p) => p.css}
 `;
 
 export interface FlexProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {

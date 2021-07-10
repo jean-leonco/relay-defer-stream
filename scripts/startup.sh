@@ -8,4 +8,4 @@ cp server/.env.local server/.env
 cp web/.env.local web/.env
 cd ..
 
-yarn update
+yarn relay
