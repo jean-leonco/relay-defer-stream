@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { css } from 'styled-components';
-import { graphql, usePaginationFragment } from 'react-relay/hooks';
+import { graphql, usePaginationFragment } from 'react-relay';
 
 import Flex from '../common/Flex';
 import Text from '../common/Text';

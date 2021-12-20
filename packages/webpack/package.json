@@ -5,15 +5,9 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
-    "dotenv-webpack": "^7.0.3",
-    "happypack": "^5.0.1",
-    "html-webpack-plugin": "^5.3.1",
-    "react-refresh": "^0.10.0",
     "webpack": "5.39.1",
     "webpack-cli": "4.7.2",
-    "webpack-dev-server": "^3.11.0",
     "webpack-node-externals": "^3.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, useFragment } from 'react-relay/hooks';
+import { graphql, useFragment } from 'react-relay';
 import { css } from 'styled-components';
 
 import Flex from '../common/Flex';

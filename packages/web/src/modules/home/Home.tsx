@@ -1,5 +1,5 @@
 import React from 'react';
-import { graphql, useLazyLoadQuery } from 'react-relay/hooks';
+import { graphql, useLazyLoadQuery } from 'react-relay';
 
 import PostList from '../post/PostList';
 

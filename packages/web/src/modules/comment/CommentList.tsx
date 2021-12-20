@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { graphql, usePaginationFragment, useSubscription } from 'react-relay/hooks';
+import { graphql, usePaginationFragment, useSubscription } from 'react-relay';
 
 import Flex from '../common/Flex';
 import InfiniteScroll from '../common/InfiniteScroll';

@@ -1,6 +1,6 @@
 import React, { Suspense, useMemo } from 'react';
 import { css } from 'styled-components';
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Flex from './modules/common/Flex';
 import Text from './modules/common/Text';
@@ -15,7 +15,7 @@ const containerCss = css`
   margin: 0 auto;
 `;
 
-const Routes = () => {
+const App = () => {
   const fallback = useMemo(
     () => (
       <Flex align="center" justify="center" css={containerCss}>
@@ -28,17 +28,13 @@ const Routes = () => {
   return (
     <Flex css={containerCss}>
       <Suspense fallback={fallback}>
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/post/:id">
-            <Post />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/post/:id" element={<Post />} />
+        </Routes>
       </Suspense>
     </Flex>
   );
 };
 
-export default Routes;
+export default App;

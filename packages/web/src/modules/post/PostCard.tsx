@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { graphql, useFragment } from 'react-relay/hooks';
+import { graphql, useFragment } from 'react-relay';
 import { Link as RouterLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
