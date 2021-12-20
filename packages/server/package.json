@@ -2,14 +2,12 @@
   "name": "@workspace/server",
   "version": "0.1.0",
   "private": true,
-  "license": "MIT",
-  "main": "build/index.js",
-  "module": "src/index.ts",
   "scripts": {
-    "b": "babel-node --extensions \".es6,.js,.es,.jsx,.mjs,.ts,.tsx\"",
-    "graphql": "webpack --progress --config webpack.dev.js",
-    "seed": "yarn b ./scripts/seedDatabase.ts",
-    "update-schema": "yarn b ./scripts/updateSchema.ts"
+    "start": "nodemon",
+    "build": "node esbuild.js",
+    "seed": "yarn ts ./scripts/seedDatabase.ts",
+    "update-schema": "yarn ts ./scripts/updateSchema.ts",
+    "ts": "node -r esbuild-register"
   },
   "dependencies": {
     "@entria/graphql-mongo-helpers": "^1.0.1",
@@ -41,7 +39,10 @@
     "@types/koa__cors": "^3.0.2",
     "@types/koa__router": "^8.0.3",
     "@types/mongoose": "^5.11.97",
-    "@workspace/webpack": "^0.1.0",
-    "faker": "^5.5.3"
+    "esbuild": "^0.14.6",
+    "esbuild-node-externals": "^1.4.1",
+    "esbuild-register": "^3.2.1",
+    "faker": "^5.5.3",
+    "nodemon": "^2.0.15"
   }
 }

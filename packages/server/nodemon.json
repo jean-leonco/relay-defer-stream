@@ -1,0 +1,5 @@
+{
+  "watch": ["src"],
+  "ext": "ts,mjs,js,json,graphql,gql",
+  "exec": "yarn build && node ./build/index.js"
+}

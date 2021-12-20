@@ -2,9 +2,6 @@
   "name": "@workspace/web",
   "version": "0.1.0",
   "private": true,
-  "license": "MIT",
-  "main": "build/index.js",
-  "module": "src/index.ts",
   "scripts": {
     "relay": "relay-compiler",
     "start": "vite"
