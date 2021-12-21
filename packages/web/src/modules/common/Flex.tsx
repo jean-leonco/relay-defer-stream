@@ -29,4 +29,4 @@ const Flex = ({ children, direction = 'column', ...props }: FlexProps, ref: Forw
   );
 };
 
-export default forwardRef<HTMLDivElement, FlexProps>(Flex);
+export default forwardRef(Flex);

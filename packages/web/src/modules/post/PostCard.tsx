@@ -1,4 +1,4 @@
-import { ForwardedRef, Suspense, forwardRef } from 'react';
+import { Suspense } from 'react';
 import { graphql, useFragment } from 'react-relay';
 import { Link as RouterLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -29,7 +29,7 @@ type PostCardProps = {
   post: PostCard_post$key;
 };
 
-const PostCard = (props: PostCardProps, ref: ForwardedRef<HTMLAnchorElement>) => {
+const PostCard = (props: PostCardProps) => {
   const data = useFragment<PostCard_post$key>(
     graphql`
       fragment PostCard_post on Post {
@@ -42,7 +42,7 @@ const PostCard = (props: PostCardProps, ref: ForwardedRef<HTMLAnchorElement>) =>
   );
 
   return (
-    <Link to={`/post/${data.id}`} ref={ref}>
+    <Link to={`/post/${data.id}`}>
       <Flex>
         <Space height={6} />
         <Text size="label">{data.content}</Text>
@@ -56,4 +56,4 @@ const PostCard = (props: PostCardProps, ref: ForwardedRef<HTMLAnchorElement>) =>
   );
 };
 
-export default forwardRef<HTMLAnchorElement, PostCardProps>(PostCard);
+export default PostCard;

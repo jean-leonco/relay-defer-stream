@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, HTMLAttributes, PropsWithoutRef, ReactNode } from 'react';
+import { DetailedHTMLProps, ForwardedRef, HTMLAttributes, PropsWithoutRef, ReactNode, forwardRef } from 'react';
 import styled, { DefaultTheme, FlattenInterpolation, FlattenSimpleInterpolation, ThemeProps } from 'styled-components';
 
 const Container = styled.span<TextProps>`
@@ -24,8 +24,12 @@ type TextProps = SpanPropsWithoutRef & {
   italic?: boolean;
 };
 
-const Text = ({ children, ...props }: TextProps) => {
-  return <Container {...props}>{children}</Container>;
+const Text = ({ children, ...props }: TextProps, ref: ForwardedRef<HTMLSpanElement>) => {
+  return (
+    <Container ref={ref} {...props}>
+      {children}
+    </Container>
+  );
 };
 
-export default Text;
+export default forwardRef(Text);

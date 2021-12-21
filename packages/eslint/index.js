@@ -48,6 +48,8 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/rules-of-hooks': 'error',
 
     // Relay
     'relay/compat-uses-vars': 'warn',

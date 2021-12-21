@@ -1,4 +1,4 @@
-import { ForwardedRef } from 'react';
+import { useCallback } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 import { css } from 'styled-components';
 
@@ -37,6 +37,14 @@ const PostList = ({ query }: PostListProps) => {
     query,
   );
 
+  const onEndReached = useCallback(() => {
+    if (isLoadingNext || !hasNext) {
+      return;
+    }
+
+    loadNext(10);
+  }, [hasNext, isLoadingNext, loadNext]);
+
   if (!data.posts?.edges) {
     return <Text>Unable to fetch posts</Text>;
   }
@@ -45,11 +53,9 @@ const PostList = ({ query }: PostListProps) => {
     <Flex align="center" css={containerCss}>
       <InfiniteScroll
         data={data.posts.edges}
-        renderItem={({ edge, ref }) => (
-          <PostCard key={edge!.node!.id} post={edge!.node!} ref={ref as ForwardedRef<HTMLAnchorElement>} />
-        )}
-        loadNext={loadNext}
-        hasNext={hasNext}
+        renderItem={({ edge }) => <PostCard key={edge!.node!.id} post={edge!.node!} />}
+        keyExtrator={(edge) => edge!.node!.id!}
+        onEndReached={onEndReached}
         isLoading={isLoadingNext}
       />
     </Flex>

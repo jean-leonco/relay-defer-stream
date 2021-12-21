@@ -1,4 +1,4 @@
-import { ForwardedRef, useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
 import Flex from '../common/Flex';
@@ -13,12 +13,7 @@ type CommentListProps = {
 };
 
 const CommentList = ({ isPaginationEnabled = true, ...props }: CommentListProps) => {
-  const {
-    data,
-    loadNext: _loadNext,
-    isLoadingNext,
-    hasNext: _hasNext,
-  } = usePaginationFragment(
+  const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment(
     graphql`
       fragment CommentList_post on Post
       @argumentDefinitions(first: { type: Int, defaultValue: 3 }, after: { type: String })
@@ -36,15 +31,13 @@ const CommentList = ({ isPaginationEnabled = true, ...props }: CommentListProps)
     props.post,
   );
 
-  const hasNext = useMemo(() => (isPaginationEnabled ? _hasNext : false), [isPaginationEnabled, _hasNext]);
-
-  const loadNext = useCallback(() => {
-    if (isPaginationEnabled) {
-      return _loadNext;
-    } else {
-      return null;
+  const onEndReached = useCallback(() => {
+    if (!isPaginationEnabled || isLoadingNext || !hasNext) {
+      return;
     }
-  }, [isPaginationEnabled, _loadNext]);
+
+    loadNext(3);
+  }, [hasNext, isLoadingNext, isPaginationEnabled, loadNext]);
 
   if (!data.comments?.edges) {
     return null;
@@ -54,11 +47,9 @@ const CommentList = ({ isPaginationEnabled = true, ...props }: CommentListProps)
     <Flex>
       <InfiniteScroll
         data={data.comments.edges}
-        renderItem={({ edge, ref }) => (
-          <CommentCard key={edge!.node!.id} comment={edge!.node!} ref={ref as ForwardedRef<HTMLDivElement>} />
-        )}
-        loadNext={loadNext}
-        hasNext={hasNext}
+        renderItem={({ edge }) => <CommentCard key={edge!.node!.id} comment={edge!.node!} />}
+        keyExtrator={(edge) => edge!.node!.id!}
+        onEndReached={onEndReached}
         isLoading={isLoadingNext}
       />
     </Flex>

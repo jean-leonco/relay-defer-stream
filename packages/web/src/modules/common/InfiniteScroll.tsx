@@ -1,11 +1,9 @@
-import { ForwardedRef, ReactElement, useCallback, useMemo, useRef } from 'react';
+import { Fragment, ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 
 import Text from './Text';
 
 export type RenderItemProps<TEdge> = {
   edge: TEdge;
-  index: number;
-  ref: ForwardedRef<Element> | null;
 };
 
 export type RenderItemFn<TEdge> = (props: RenderItemProps<TEdge>) => ReactElement;
@@ -13,57 +11,54 @@ export type RenderItemFn<TEdge> = (props: RenderItemProps<TEdge>) => ReactElemen
 type InfiniteScrollProps<TEdge> = {
   data: TEdge[] | readonly TEdge[];
   renderItem: RenderItemFn<TEdge>;
-  loadNext(first: number): void;
-  hasNext: boolean;
+  keyExtrator: (item: TEdge, index: number) => string;
+  onEndReached?: () => void;
   isLoading: boolean;
 };
 
-function InfiniteScroll<TEdge>({ data, renderItem, loadNext, hasNext, isLoading }: InfiniteScrollProps<TEdge>) {
-  const observer = useRef<IntersectionObserver>();
+function InfiniteScroll<TEdge>({ data, renderItem, keyExtrator, onEndReached, isLoading }: InfiniteScrollProps<TEdge>) {
+  const [shouldCallOnEndReached, setShouldCallOnEndReached] = useState(false);
 
-  const lastItemRef: ForwardedRef<Element> = useCallback(
-    (node: Element | null) => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-
-      if (node) {
-        const options: IntersectionObserverInit = {
-          rootMargin: '0px',
-          threshold: 0.6,
-        };
-
-        observer.current = new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting && hasNext && !isLoading) {
-            loadNext(10);
-          }
-        }, options);
-
-        observer.current.observe(node);
-      }
-    },
-    [hasNext, isLoading, loadNext],
-  );
+  const observerRef = useRef<HTMLSpanElement>(null);
 
   const renderCard = useCallback(
     (edge: TEdge, index: number) => {
-      const node = renderItem({
-        edge,
-        index,
-        ref: data.length === index + 1 ? lastItemRef : null,
-      });
+      const item = renderItem({ edge });
 
-      return node;
+      return <Fragment key={keyExtrator(edge, index)}>{item}</Fragment>;
     },
-    [data.length, renderItem, lastItemRef],
+    [keyExtrator, renderItem],
   );
 
-  const cards = useMemo(() => data.map(renderCard), [data, renderCard]);
+  useEffect(() => {
+    const options: IntersectionObserverInit = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 1.0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setShouldCallOnEndReached(true);
+      }
+    }, options);
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (shouldCallOnEndReached && onEndReached) {
+      onEndReached();
+      setShouldCallOnEndReached(false);
+    }
+  }, [onEndReached, shouldCallOnEndReached]);
 
   return (
     <>
-      {cards}
-      {isLoading && <Text>Loading...</Text>}
+      {data.map(renderCard)}
+      <Text ref={observerRef}>{isLoading ? 'Loading...' : ''}</Text>
     </>
   );
 }

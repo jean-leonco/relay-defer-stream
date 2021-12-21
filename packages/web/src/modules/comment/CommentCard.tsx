@@ -18,7 +18,7 @@ type CommentCardProps = {
   comment: CommentCard_Comment$key;
 };
 
-const CommentCard = (props: CommentCardProps, ref: ForwardedRef<HTMLDivElement>) => {
+const CommentCard = (props: CommentCardProps) => {
   const comment = useFragment(
     graphql`
       fragment CommentCard_Comment on Comment {
@@ -29,10 +29,10 @@ const CommentCard = (props: CommentCardProps, ref: ForwardedRef<HTMLDivElement>)
   );
 
   return (
-    <Flex css={commentCss} ref={ref}>
+    <Flex css={commentCss}>
       <Text>{comment.body}</Text>
     </Flex>
   );
 };
 
-export default forwardRef<HTMLDivElement, CommentCardProps>(CommentCard);
+export default CommentCard;
