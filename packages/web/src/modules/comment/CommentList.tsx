@@ -1,4 +1,4 @@
-import React, { ForwardedRef, useCallback, useMemo } from 'react';
+import { ForwardedRef, useCallback, useMemo } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
 import Flex from '../common/Flex';

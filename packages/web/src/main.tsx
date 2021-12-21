@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { RelayEnvironmentProvider } from 'react-relay';
 import { BrowserRouter } from 'react-router-dom';
@@ -9,7 +9,7 @@ import theme from './modules/common/theme';
 import { environment } from './relay';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <RelayEnvironmentProvider environment={environment}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
@@ -17,6 +17,6 @@ ReactDOM.render(
         </BrowserRouter>
       </ThemeProvider>
     </RelayEnvironmentProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root'),
 );

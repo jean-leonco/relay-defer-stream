@@ -1,4 +1,4 @@
-import React, { PropsWithoutRef } from 'react';
+import { DetailedHTMLProps, HTMLAttributes, PropsWithoutRef, ReactNode } from 'react';
 import styled, { DefaultTheme, FlattenInterpolation, FlattenSimpleInterpolation, ThemeProps } from 'styled-components';
 
 const Container = styled.span<TextProps>`
@@ -11,16 +11,14 @@ const Container = styled.span<TextProps>`
   ${(p) => p.css}
 `;
 
-type SpanPropsWithoutRef = PropsWithoutRef<
-  React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
->;
+type SpanPropsWithoutRef = PropsWithoutRef<DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>>;
 
 type TextProps = SpanPropsWithoutRef & {
   color?: string;
   size?: string;
   height?: number;
   weight?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   css?: FlattenSimpleInterpolation | FlattenInterpolation<ThemeProps<DefaultTheme>>;
   center?: boolean;
   italic?: boolean;

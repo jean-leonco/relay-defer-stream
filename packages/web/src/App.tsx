@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { css } from 'styled-components';
 

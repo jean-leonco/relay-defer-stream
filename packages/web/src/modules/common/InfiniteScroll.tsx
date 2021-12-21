@@ -1,4 +1,4 @@
-import React, { ForwardedRef, ReactElement, useCallback, useMemo, useRef } from 'react';
+import { ForwardedRef, ReactElement, useCallback, useMemo, useRef } from 'react';
 
 import Text from './Text';
 

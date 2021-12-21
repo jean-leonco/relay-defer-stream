@@ -1,4 +1,4 @@
-import React, { ForwardedRef, Suspense, forwardRef } from 'react';
+import { ForwardedRef, Suspense, forwardRef } from 'react';
 import { graphql, useFragment } from 'react-relay';
 import { Link as RouterLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';

@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, HTMLAttributes, PropsWithoutRef, ReactNode } from 'react';
+import { DetailedHTMLProps, ForwardedRef, HTMLAttributes, PropsWithoutRef, ReactNode, forwardRef } from 'react';
 import styled, { DefaultTheme, FlattenInterpolation, FlattenSimpleInterpolation, ThemeProps } from 'styled-components';
 
 const Container = styled.div<FlexProps>`
@@ -21,7 +21,7 @@ type FlexProps = DivPropsWithoutRef & {
   css?: FlattenSimpleInterpolation | FlattenInterpolation<ThemeProps<DefaultTheme>>;
 };
 
-const Flex = ({ children, direction = 'column', ...props }: FlexProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+const Flex = ({ children, direction = 'column', ...props }: FlexProps, ref: ForwardedRef<HTMLDivElement>) => {
   return (
     <Container direction={direction} ref={ref} {...props}>
       {children}
@@ -29,4 +29,4 @@ const Flex = ({ children, direction = 'column', ...props }: FlexProps, ref: Reac
   );
 };
 
-export default React.forwardRef<HTMLDivElement, FlexProps>(Flex);
+export default forwardRef<HTMLDivElement, FlexProps>(Flex);

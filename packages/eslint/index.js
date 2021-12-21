@@ -15,15 +15,21 @@ module.exports = {
     ecmaFeatures: { jsx: true },
   },
   rules: {
-    'no-console': 'warn',
+    // Eslint
     indent: 'off',
+    'no-console': 'warn',
     'sort-imports': ['error', { ignoreDeclarationSort: true, allowSeparatedGroups: true }],
-    '@typescript-eslint/indent': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
+
+    // Typescript
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/indent': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+
+    // Import
     'import/named': 'off',
     'import/namespace': ['error', { allowComputed: true }],
+    'import/no-cycle': 'error',
     'import/no-duplicates': 'error',
     'import/order': [
       'error',
@@ -37,12 +43,17 @@ module.exports = {
         },
       },
     ],
-    'import/no-cycle': 'error',
+
+    // React
+    'react/jsx-uses-react': 'off',
     'react/prop-types': 'off',
-    'relay/graphql-syntax': 'error',
+    'react/react-in-jsx-scope': 'off',
+
+    // Relay
     'relay/compat-uses-vars': 'warn',
-    'relay/graphql-naming': 'error',
     'relay/generated-flow-types': 'off',
+    'relay/graphql-naming': 'error',
+    'relay/graphql-syntax': 'error',
   },
   settings: {
     react: {

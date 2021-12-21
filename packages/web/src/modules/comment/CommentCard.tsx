@@ -1,4 +1,4 @@
-import React from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 import { graphql, useFragment } from 'react-relay';
 import { css } from 'styled-components';
 
@@ -18,7 +18,7 @@ type CommentCardProps = {
   comment: CommentCard_Comment$key;
 };
 
-const CommentCard = (props: CommentCardProps, ref: React.ForwardedRef<HTMLDivElement>) => {
+const CommentCard = (props: CommentCardProps, ref: ForwardedRef<HTMLDivElement>) => {
   const comment = useFragment(
     graphql`
       fragment CommentCard_Comment on Comment {
@@ -35,4 +35,4 @@ const CommentCard = (props: CommentCardProps, ref: React.ForwardedRef<HTMLDivEle
   );
 };
 
-export default React.forwardRef<HTMLDivElement, CommentCardProps>(CommentCard);
+export default forwardRef<HTMLDivElement, CommentCardProps>(CommentCard);

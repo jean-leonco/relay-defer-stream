@@ -1,4 +1,4 @@
-import React, { ForwardedRef } from 'react';
+import { ForwardedRef } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 import { css } from 'styled-components';
 
