@@ -1,13 +1,8 @@
-import 'core-js';
-// eslint-disable-next-line import/no-unresolved
-import fs from 'fs/promises';
+import fs from 'fs';
 import path from 'path';
 
-import { printSchema } from 'graphql/utilities';
+import { printSchema } from 'graphql';
 
 import schema from '../src/schema/schema';
 
-(async () => {
-  await fs.writeFile(path.join(__dirname, `../../schema/schema.graphql`), printSchema(schema));
-  process.exit(0);
-})();
+fs.writeFileSync(path.join(__dirname, `../../schema/schema.graphql`), printSchema(schema));

@@ -1,12 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { graphql, usePaginationFragment, useSubscription } from 'react-relay';
+import { graphql, usePaginationFragment } from 'react-relay';
 
 import Flex from '../common/Flex';
 import InfiniteScroll from '../common/InfiniteScroll';
 
 import CommentCard from './CommentCard';
 import { CommentListPaginationQuery } from './__generated__/CommentListPaginationQuery.graphql';
-import { CommentListSubscription } from './__generated__/CommentListSubscription.graphql';
 import { CommentList_post$key } from './__generated__/CommentList_post.graphql';
 
 interface CommentListProps {
@@ -42,7 +41,7 @@ const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListPro
   );
 
   const comments = useMemo(
-    () => (shouldEnablePagination ? [] : data.comments?.edges.slice(0, 3).map((edge) => renderComment({ edge }))),
+    () => (shouldEnablePagination ? [] : data.comments?.edges!.slice(0, 3).map((edge) => renderComment({ edge }))),
     [data.comments?.edges, renderComment, shouldEnablePagination],
   );
 
@@ -53,26 +52,6 @@ const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListPro
   if (!shouldEnablePagination) {
     return <Flex>{comments.length > 0 ? comments : 'No comments'}</Flex>;
   }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useSubscription<CommentListSubscription>({
-    subscription: graphql`
-      subscription CommentListSubscription($input: CommentNewInput!, $connections: [ID!]!) {
-        CommentNew(input: $input) {
-          commentEdge @prependEdge(connections: $connections) {
-            node {
-              id
-              ...CommentCard_Comment
-            }
-          }
-        }
-      }
-    `,
-    variables: {
-      input: { post: data.id },
-      connections: [`client:${data.id}:__CommentList_comments_connection`],
-    },
-  });
 
   return (
     <Flex>

@@ -1,21 +1,15 @@
 import { createLoader } from '@entria/graphql-mongo-helpers';
 
-import { registerLoader } from '../loader/loaderRegister';
+import { registerLoader } from '../../loader/loaderRegister';
+import { GraphQLContext } from '../../types';
 
-import PostModel from './PostModel';
+import PostModel, { IPost } from './PostModel';
 
-const {
-  Wrapper: Post,
-  getLoader,
-  load,
-  loadAll,
-} = createLoader({
+const PostLoader = createLoader<GraphQLContext, 'PostLoader', IPost>({
   model: PostModel,
   loaderName: 'PostLoader',
 });
 
-registerLoader('PostLoader', getLoader);
+registerLoader('PostLoader', PostLoader.getLoader);
 
-export { getLoader, load, loadAll };
-
-export default Post;
+export default PostLoader;

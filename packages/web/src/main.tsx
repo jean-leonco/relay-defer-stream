@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { RelayEnvironmentProvider } from 'react-relay';
 
-import relayEnvironment from '../relay/relayEnvironment';
+import { environment } from './relay';
 
 import theme from './modules/common/theme';
 
@@ -12,7 +12,7 @@ import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <RelayEnvironmentProvider environment={relayEnvironment}>
+    <RelayEnvironmentProvider environment={environment}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <App />

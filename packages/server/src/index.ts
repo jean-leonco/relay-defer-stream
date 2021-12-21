@@ -4,7 +4,6 @@ import { createServer } from 'http';
 
 import { connectDatabase } from './database';
 import app from './app';
-import { PROTOCOL, GRAPHQL_HOST, GRAPHQL_PORT, isProduction } from './config';
 
 const runServer = async () => {
   try {
@@ -17,12 +16,8 @@ const runServer = async () => {
 
   const server = createServer(app.callback());
 
-  server.listen(GRAPHQL_PORT, () => {
-    console.info(`\n🚀 Server started at ${PROTOCOL}://${GRAPHQL_HOST}:${GRAPHQL_PORT}`);
-
-    if (!isProduction) {
-      console.info(`🎠 GraphQL Playground available at ${PROTOCOL}://${GRAPHQL_HOST}:${GRAPHQL_PORT}/playground\n`);
-    }
+  server.listen(5001, () => {
+    console.info(`\n🚀 Server started at http://127.0.01:5001/graphql`);
   });
 };
 

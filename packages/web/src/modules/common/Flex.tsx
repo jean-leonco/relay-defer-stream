@@ -1,4 +1,4 @@
-import React, { DetailedHTMLProps, HTMLAttributes, ReactNode } from 'react';
+import React, { DetailedHTMLProps, HTMLAttributes, PropsWithoutRef, ReactNode } from 'react';
 import styled, { DefaultTheme, FlattenInterpolation, ThemedStyledProps } from 'styled-components';
 
 const Container = styled.div<FlexProps>`
@@ -10,7 +10,7 @@ const Container = styled.div<FlexProps>`
   ${(p) => p.css}
 `;
 
-export interface FlexProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+export interface FlexProps extends PropsWithoutRef<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>> {
   direction?: 'column' | 'row';
   justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';

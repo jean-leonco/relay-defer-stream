@@ -1,24 +1,18 @@
 import { createLoader } from '@entria/graphql-mongo-helpers';
 
-import { registerLoader } from '../loader/loaderRegister';
+import { registerLoader } from '../../loader/loaderRegister';
 
-import CommentModel from './CommentModel';
+import { GraphQLContext } from '../../types';
+
+import CommentModel, { IComment } from './CommentModel';
 import { commentFilterMapping } from './CommentFilterInputType';
 
-const {
-  Wrapper: Comment,
-  getLoader,
-  clearCache,
-  load,
-  loadAll,
-} = createLoader({
+const CommentLoader = createLoader<GraphQLContext, 'CommentLoader', IComment>({
   model: CommentModel,
   loaderName: 'CommentLoader',
   filterMapping: commentFilterMapping,
 });
 
-registerLoader('CommentLoader', getLoader);
+registerLoader('CommentLoader', CommentLoader.getLoader);
 
-export { getLoader, clearCache, load, loadAll };
-
-export default Comment;
+export default CommentLoader;

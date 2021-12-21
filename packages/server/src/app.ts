@@ -7,31 +7,18 @@ import cors from '@koa/cors';
 import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
 import Router from '@koa/router';
-import { koaPlayground } from 'graphql-playground-middleware';
 import { getGraphQLParameters, processRequest, shouldRenderGraphiQL, renderGraphiQL } from 'graphql-helix';
 
-import { KoaContext } from './types';
 import schema from './schema/schema';
-import { getDataloaders } from './modules/loader/loaderRegister';
+import { getDataloaders } from './loader/loaderRegister';
 
-const app = new Koa<any, KoaContext>();
-const router = new Router<any, KoaContext>();
+const app = new Koa();
+const router = new Router();
 
 app.use(bodyParser());
 app.use(cors({ maxAge: 86400, origin: '*' }));
 
-app.on('error', (error) => {
-  console.error('Error while answering request', { error });
-});
-
 app.use(logger());
-
-router.all('/playground', koaPlayground({ endpoint: '/graphql' }));
-
-app.use(async (ctx, next) => {
-  ctx.dataloaders = getDataloaders();
-  await next();
-});
 
 router.all('/graphql', async (ctx) => {
   const request = {
@@ -53,7 +40,7 @@ router.all('/graphql', async (ctx) => {
       variables,
       request,
       schema,
-      contextFactory: () => ({ dataloaders: ctx.dataloaders, koaContext: ctx }),
+      contextFactory: () => ({ dataloaders: getDataloaders(), koaContext: ctx }),
     });
 
     if (result.type === 'RESPONSE') {

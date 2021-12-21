@@ -1,0 +1,126 @@
+diff --git a/node_modules/graphql/index.d.ts b/node_modules/graphql/index.d.ts
+index c783737..c70af50 100644
+--- a/node_modules/graphql/index.d.ts
++++ b/node_modules/graphql/index.d.ts
+@@ -30,6 +30,8 @@ export type { GraphQLArgs } from './graphql';
+ export { graphql, graphqlSync } from './graphql';
+ /** Create and operate on GraphQL type definitions and schema. */
+ export {
++  resolveObjMapThunk,
++  resolveReadonlyArrayThunk,
+   /** Definitions */
+   GraphQLSchema,
+   GraphQLDirective,
+diff --git a/node_modules/graphql/index.js b/node_modules/graphql/index.js
+index ae36b0b..ffeac31 100644
+--- a/node_modules/graphql/index.js
++++ b/node_modules/graphql/index.js
+@@ -69,12 +69,6 @@ Object.defineProperty(exports, 'GraphQLBoolean', {
+     return _index.GraphQLBoolean;
+   },
+ });
+-Object.defineProperty(exports, 'GraphQLDeferDirective', {
+-  enumerable: true,
+-  get: function () {
+-    return _index.GraphQLDeferDirective;
+-  },
+-});
+ Object.defineProperty(exports, 'GraphQLDeprecatedDirective', {
+   enumerable: true,
+   get: function () {
+@@ -177,12 +171,6 @@ Object.defineProperty(exports, 'GraphQLSpecifiedByDirective', {
+     return _index.GraphQLSpecifiedByDirective;
+   },
+ });
+-Object.defineProperty(exports, 'GraphQLStreamDirective', {
+-  enumerable: true,
+-  get: function () {
+-    return _index.GraphQLStreamDirective;
+-  },
+-});
+ Object.defineProperty(exports, 'GraphQLString', {
+   enumerable: true,
+   get: function () {
+@@ -1131,6 +1119,18 @@ Object.defineProperty(exports, 'printType', {
+     return _index6.printType;
+   },
+ });
++Object.defineProperty(exports, 'resolveObjMapThunk', {
++  enumerable: true,
++  get: function () {
++    return _index.resolveObjMapThunk;
++  },
++});
++Object.defineProperty(exports, 'resolveReadonlyArrayThunk', {
++  enumerable: true,
++  get: function () {
++    return _index.resolveReadonlyArrayThunk;
++  },
++});
+ Object.defineProperty(exports, 'responsePathAsArray', {
+   enumerable: true,
+   get: function () {
+diff --git a/node_modules/graphql/type/definition.d.ts b/node_modules/graphql/type/definition.d.ts
+index 366684e..122575c 100644
+--- a/node_modules/graphql/type/definition.d.ts
++++ b/node_modules/graphql/type/definition.d.ts
+@@ -279,6 +279,10 @@ export declare type ThunkReadonlyArray<T> =
+   | (() => ReadonlyArray<T>)
+   | ReadonlyArray<T>;
+ export declare type ThunkObjMap<T> = (() => ObjMap<T>) | ObjMap<T>;
++export declare function resolveReadonlyArrayThunk<T>(
++  thunk: ThunkReadonlyArray<T>,
++): ReadonlyArray<T>;
++export declare function resolveObjMapThunk<T>(thunk: ThunkObjMap<T>): ObjMap<T>;
+ /**
+  * Custom extensions
+  *
+diff --git a/node_modules/graphql/type/definition.js b/node_modules/graphql/type/definition.js
+index 0e0ac0a..682e672 100644
+--- a/node_modules/graphql/type/definition.js
++++ b/node_modules/graphql/type/definition.js
+@@ -52,6 +52,8 @@ exports.isScalarType = isScalarType;
+ exports.isType = isType;
+ exports.isUnionType = isUnionType;
+ exports.isWrappingType = isWrappingType;
++exports.resolveObjMapThunk = resolveObjMapThunk;
++exports.resolveReadonlyArrayThunk = resolveReadonlyArrayThunk;
+ 
+ var _inspect = require('../jsutils/inspect.js');
+ 
+diff --git a/node_modules/graphql/type/index.d.ts b/node_modules/graphql/type/index.d.ts
+index d4d817d..bb62367 100644
+--- a/node_modules/graphql/type/index.d.ts
++++ b/node_modules/graphql/type/index.d.ts
+@@ -9,6 +9,8 @@ export {
+ } from './schema';
+ export type { GraphQLSchemaConfig, GraphQLSchemaExtensions } from './schema';
+ export {
++  resolveObjMapThunk,
++  resolveReadonlyArrayThunk,
+   /** Predicates */
+   isType,
+   isScalarType,
+diff --git a/node_modules/graphql/type/index.js b/node_modules/graphql/type/index.js
+index 8291d62..3e21bed 100644
+--- a/node_modules/graphql/type/index.js
++++ b/node_modules/graphql/type/index.js
+@@ -141,6 +141,18 @@ Object.defineProperty(exports, 'GraphQLString', {
+     return _scalars.GraphQLString;
+   },
+ });
++Object.defineProperty(exports, 'resolveObjMapThunk', {
++  enumerable: true,
++  get: function () {
++    return _definition.resolveObjMapThunk;
++  },
++});
++Object.defineProperty(exports, 'resolveReadonlyArrayThunk', {
++  enumerable: true,
++  get: function () {
++    return _definition.resolveReadonlyArrayThunk;
++  },
++});
+ Object.defineProperty(exports, 'GraphQLUnionType', {
+   enumerable: true,
+   get: function () {

@@ -1,25 +1,22 @@
 import path from 'path';
 
-import dotEnvSafe from 'dotenv-safe';
+import dotenv from 'dotenv';
+import { cleanEnv, str, url } from 'envalid';
 
 const cwd = process.cwd();
-
 const root = path.join.bind(cwd);
 
-dotEnvSafe.config({
-  allowEmptyValues: process.env.NODE_ENV !== 'production',
+dotenv.config({
   path: root('.env'),
-  sample: root('.env.example'),
 });
 
-// Environment
-export const NODE_ENV = process.env.NODE_ENV;
-export const isProduction = NODE_ENV === 'production';
-
-// GraphQL
-export const GRAPHQL_HOST = process.env.GRAPHQL_HOST || '127.0.0.1';
-export const GRAPHQL_PORT = process.env.GRAPHQL_PORT || 5001;
-export const PROTOCOL = isProduction ? 'https' : 'http';
-
-// Database
-export const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost/relay';
+export const { NODE_ENV, MONGO_URI } = cleanEnv(process.env, {
+  NODE_ENV: str({
+    desc: 'Application node environment.',
+    choices: ['development', 'test', 'production'],
+  }),
+  MONGO_URI: url({
+    desc: 'MongoDB connection URI.',
+    default: 'mongodb://localhost/relay',
+  }),
+});

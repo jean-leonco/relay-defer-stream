@@ -12,21 +12,16 @@
     ]
   },
   "scripts": {
-    "db:seed": "yarn workspace @workspace/server seed",
-    "delete:generated": "find . -name \"__generated__\" -exec rm -rf '{}' +",
-    "delete:node_modules": "find . -name \"node_modules\" -exec rm -rf '{}' +",
-    "graphql": "yarn workspace @workspace/server graphql",
-    "relay": "yarn workspace @workspace/web relay",
+    "postinstall": "patch-package",
+    "server": "yarn workspace @workspace/server",
     "startup": "./scripts/startup.sh",
-    "update": "yarn update-schema && yarn relay",
-    "update-schema": "yarn workspace @workspace/server update-schema",
-    "web": "yarn workspace @workspace/web start"
+    "update": "yarn server update-schema && yarn web relay",
+    "web": "yarn workspace @workspace/web"
   },
-  "resolutions": {
-    "graphql": "15.4.0-experimental-stream-defer.1"
-  },
-  "dependencies": {},
   "devDependencies": {
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
+    "sort-package-json": "^1.53.1",
     "typescript": "^4.3.5"
   }
 }

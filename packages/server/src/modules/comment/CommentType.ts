@@ -1,23 +1,22 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
-import { globalIdField } from 'graphql-relay';
-import { objectIdResolver, timestampResolver, connectionDefinitions } from '@entria/graphql-mongo-helpers';
+import { connectionDefinitions, globalIdField } from 'graphql-relay';
+import { timestampResolver } from '@entria/graphql-mongo-helpers';
 
-import { nodeInterface, registerTypeLoader } from '../loader/typeRegister';
+import { nodeInterface, registerTypeLoader } from '../../loader/typeRegister';
 
 import { GraphQLContext } from '../../types';
 
-import * as PostLoader from '../post/PostLoader';
+import PostLoader from '../post/PostLoader';
 import PostType from '../post/PostType';
 
 import { IComment } from './CommentModel';
-import { load } from './CommentLoader';
+import CommentLoader from './CommentLoader';
 
 const CommentType = new GraphQLObjectType<IComment, GraphQLContext>({
   name: 'Comment',
   description: 'Comment data',
   fields: () => ({
     id: globalIdField('Comment'),
-    ...objectIdResolver,
     body: {
       type: GraphQLString,
       resolve: (data) => data.body,
@@ -31,7 +30,7 @@ const CommentType = new GraphQLObjectType<IComment, GraphQLContext>({
   interfaces: () => [nodeInterface],
 });
 
-registerTypeLoader(CommentType, load);
+registerTypeLoader(CommentType, CommentLoader.load);
 
 export const CommentConnection = connectionDefinitions({
   name: 'Comment',

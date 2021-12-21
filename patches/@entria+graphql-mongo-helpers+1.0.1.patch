@@ -1,0 +1,93 @@
+diff --git a/node_modules/@entria/graphql-mongo-helpers/lib/connectionDefinitions.js b/node_modules/@entria/graphql-mongo-helpers/lib/connectionDefinitions.js
+index b99a75a..c00376b 100644
+--- a/node_modules/@entria/graphql-mongo-helpers/lib/connectionDefinitions.js
++++ b/node_modules/@entria/graphql-mongo-helpers/lib/connectionDefinitions.js
+@@ -24,11 +24,11 @@ exports.PageInfoType = new graphql_1.GraphQLObjectType({
+     description: 'Information about pagination in a connection.',
+     fields: () => ({
+         hasNextPage: {
+-            type: graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
++            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
+             description: 'When paginating forwards, are there more items?',
+         },
+         hasPreviousPage: {
+-            type: graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
++            type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLBoolean),
+             description: 'When paginating backwards, are there more items?',
+         },
+         startCursor: {
+@@ -55,15 +55,15 @@ argument to "first", then fetch the total count so it could display "5 of 83",
+ for example.`,
+     },
+     startCursorOffset: {
+-        type: graphql_1.GraphQLNonNull(graphql_1.GraphQLInt),
++        type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLInt),
+         description: 'Offset from start.',
+     },
+     endCursorOffset: {
+-        type: graphql_1.GraphQLNonNull(graphql_1.GraphQLInt),
++        type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLInt),
+         description: 'Offset till end.',
+     },
+     pageInfo: {
+-        type: graphql_1.GraphQLNonNull(exports.PageInfoType),
++        type: new graphql_1.GraphQLNonNull(exports.PageInfoType),
+         description: 'Information to aid in pagination.',
+     },
+ };
+@@ -88,7 +88,7 @@ const connectionDefinitions = (config) => {
+                 resolve: resolveNode,
+                 description: 'The item at the end of the edge.',
+             }, cursor: {
+-                type: graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
++                type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+                 resolve: resolveCursor,
+                 description: 'A cursor for use in pagination.',
+             } }, resolveMaybeThunk(edgeFields))),
+@@ -97,7 +97,7 @@ const connectionDefinitions = (config) => {
+         name: `${name}Connection`,
+         description: config.description || 'A connection to a list of items.',
+         fields: () => (Object.assign(Object.assign(Object.assign({}, connectionProps), { edges: {
+-                type: graphql_1.GraphQLNonNull(graphql_1.GraphQLList(edgeType)),
++                type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLList(edgeType)),
+                 description: 'A list of edges.',
+             } }), resolveMaybeThunk(connectionFields))),
+         interfaces: [exports.ConnectionInterface],
+diff --git a/node_modules/@entria/graphql-mongo-helpers/lib/createLoader.d.ts b/node_modules/@entria/graphql-mongo-helpers/lib/createLoader.d.ts
+index 50bdf14..6b6ab9a 100644
+--- a/node_modules/@entria/graphql-mongo-helpers/lib/createLoader.d.ts
++++ b/node_modules/@entria/graphql-mongo-helpers/lib/createLoader.d.ts
+@@ -20,7 +20,7 @@ export declare type CreateLoaderArgs<Context extends BaseContext<LoaderName, Val
+ export interface FilteredConnectionArguments extends ConnectionArguments {
+     filters: GraphQLFilter | null;
+ }
+-export declare const createLoader: <Context extends BaseContext<LoaderName, Value>, LoaderName extends string, Value extends Document<any>>({ model, viewerCanSee, loaderName, filterMapping, isAggregate, shouldValidateContextUser, defaultFilters, defaultConditions, defaultSort, }: CreateLoaderArgs<Context, LoaderName, Value>) => {
++export declare const createLoader: <Context extends BaseContext<LoaderName, Value>, LoaderName extends string = string, Value extends Document<any> = Document<any>>({ model, viewerCanSee, loaderName, filterMapping, isAggregate, shouldValidateContextUser, defaultFilters, defaultConditions, defaultSort, }: CreateLoaderArgs<Context, LoaderName, Value>) => {
+     Wrapper: new (value: Value) => Value;
+     getLoader: () => DataLoader<string, Value, string>;
+     clearCache: ({ dataloaders }: Context, id: string) => Record<LoaderName, DataLoader<string, Value, string>>[LoaderName];
+diff --git a/node_modules/@entria/graphql-mongo-helpers/lib/documentResolvers.js b/node_modules/@entria/graphql-mongo-helpers/lib/documentResolvers.js
+index f8fa5ee..7ce784a 100644
+--- a/node_modules/@entria/graphql-mongo-helpers/lib/documentResolvers.js
++++ b/node_modules/@entria/graphql-mongo-helpers/lib/documentResolvers.js
+@@ -4,7 +4,7 @@ exports.timestampResolver = exports.objectIdResolver = void 0;
+ const graphql_1 = require("graphql");
+ exports.objectIdResolver = {
+     _id: {
+-        type: graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
++        type: new graphql_1.GraphQLNonNull(graphql_1.GraphQLString),
+         description: 'mongoose _id',
+         resolve: ({ _id }) => _id.toString(),
+     },
+diff --git a/node_modules/@entria/graphql-mongo-helpers/lib/types.d.ts b/node_modules/@entria/graphql-mongo-helpers/lib/types.d.ts
+index 823d145..4bc40c2 100644
+--- a/node_modules/@entria/graphql-mongo-helpers/lib/types.d.ts
++++ b/node_modules/@entria/graphql-mongo-helpers/lib/types.d.ts
+@@ -1,5 +1,5 @@
+-import { Types } from 'mongoose';
+-export declare type DataLoaderKey = string | Types.ObjectId;
++import { Schema, Types } from 'mongoose';
++export declare type DataLoaderKey = string | Schema.Types.ObjectId | Types.ObjectId;
+ export declare type BuiltConditionSet = {
+     conditions: Object;
+     pipeline: Object[];

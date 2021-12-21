@@ -6,10 +6,10 @@ import { GraphQLContext } from '../../../types';
 
 import pubSub, { EVENTS } from '../../../pubSub';
 
-import * as PostLoader from '../../post/PostLoader';
+import PostLoader from '../../post/PostLoader';
 
 import CommentModel from '../CommentModel';
-import * as CommentLoader from '../CommentLoader';
+import CommentLoader from '../CommentLoader';
 import { CommentConnection } from '../CommentType';
 
 interface CommentAddMutationArgs {
@@ -21,11 +21,11 @@ const mutation = mutationWithClientMutationId({
   name: 'CommentAdd',
   inputFields: {
     post: {
-      type: GraphQLNonNull(GraphQLID),
+      type: new GraphQLNonNull(GraphQLID),
       description: 'The post Global Id.',
     },
     body: {
-      type: GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'The comment body.',
     },
   },
