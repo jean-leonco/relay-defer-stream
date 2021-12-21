@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 import { MONGO_URI } from './config';
 
-export const connectDatabase = () => {
+export const connectDatabase = (): Promise<void> => {
   return new Promise((resolve, reject) => {
     mongoose.Promise = global.Promise;
     mongoose.connection
@@ -20,7 +20,7 @@ export const connectDatabase = () => {
       .once('open', () => {
         const infos = mongoose.connections;
         infos.map((info) => console.log(`⛓️  Connected to ${info.host}:${info.port}/${info.name}`));
-        resolve(mongoose.connections[0]);
+        resolve();
       });
 
     mongoose.connect(MONGO_URI, {

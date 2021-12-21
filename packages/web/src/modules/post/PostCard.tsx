@@ -1,13 +1,12 @@
-import React, { Suspense } from 'react';
+import React, { ForwardedRef, Suspense, forwardRef } from 'react';
 import { graphql, useFragment } from 'react-relay';
 import { Link as RouterLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
+import CommentList from '../comment/CommentList';
 import Flex from '../common/Flex';
 import Space from '../common/Space';
 import Text from '../common/Text';
-
-import CommentList from '../comment/CommentList';
 
 import { PostCard_post$key } from './__generated__/PostCard_post.graphql';
 
@@ -26,11 +25,11 @@ const spacerCss = css`
   background: rgba(0, 0, 0, 0.2);
 `;
 
-interface PostCardProps {
-  query: PostCard_post$key;
-}
+type PostCardProps = {
+  post: PostCard_post$key;
+};
 
-const PostCard = (props: PostCardProps, ref: React.ForwardedRef<HTMLAnchorElement>) => {
+const PostCard = (props: PostCardProps, ref: ForwardedRef<HTMLAnchorElement>) => {
   const data = useFragment<PostCard_post$key>(
     graphql`
       fragment PostCard_post on Post {
@@ -39,7 +38,7 @@ const PostCard = (props: PostCardProps, ref: React.ForwardedRef<HTMLAnchorElemen
         ...CommentList_post @defer
       }
     `,
-    props.query,
+    props.post,
   );
 
   return (
@@ -50,11 +49,11 @@ const PostCard = (props: PostCardProps, ref: React.ForwardedRef<HTMLAnchorElemen
         <Flex css={spacerCss} />
         <Suspense fallback={'Loading comments...'}>
           <Text weight="semiBold">Comments:</Text>
-          <CommentList query={data} shouldEnablePagination={false} />
+          <CommentList post={data} isPaginationEnabled={false} />
         </Suspense>
       </Flex>
     </Link>
   );
 };
 
-export default React.forwardRef<HTMLAnchorElement, PostCardProps>(PostCard);
+export default forwardRef<HTMLAnchorElement, PostCardProps>(PostCard);

@@ -1,9 +1,9 @@
-import { Context } from 'koa';
-import DataLoader from 'dataloader';
 import { DataLoaderKey } from '@entria/graphql-mongo-helpers';
+import DataLoader from 'dataloader';
+import { Context } from 'koa';
 
-import { IPost } from './modules/post/PostModel';
 import { IComment } from './modules/comment/CommentModel';
+import { IPost } from './modules/post/PostModel';
 
 export interface GraphQLDataloaders {
   PostLoader: DataLoader<DataLoaderKey, IPost>;

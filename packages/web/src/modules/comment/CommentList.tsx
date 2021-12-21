@@ -1,23 +1,24 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { ForwardedRef, useCallback, useMemo } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
 import Flex from '../common/Flex';
 import InfiniteScroll from '../common/InfiniteScroll';
 
-import CommentCard from './CommentCard';
-import { CommentListPaginationQuery } from './__generated__/CommentListPaginationQuery.graphql';
 import { CommentList_post$key } from './__generated__/CommentList_post.graphql';
+import CommentCard from './CommentCard';
 
-interface CommentListProps {
-  query: CommentList_post$key;
-  shouldEnablePagination?: boolean;
-}
+type CommentListProps = {
+  post: CommentList_post$key;
+  isPaginationEnabled?: boolean;
+};
 
-const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListProps) => {
-  const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
-    CommentListPaginationQuery,
-    CommentList_post$key
-  >(
+const CommentList = ({ isPaginationEnabled = true, ...props }: CommentListProps) => {
+  const {
+    data,
+    loadNext: _loadNext,
+    isLoadingNext,
+    hasNext: _hasNext,
+  } = usePaginationFragment(
     graphql`
       fragment CommentList_post on Post
       @argumentDefinitions(first: { type: Int, defaultValue: 3 }, after: { type: String })
@@ -32,32 +33,30 @@ const CommentList = ({ shouldEnablePagination = true, ...props }: CommentListPro
         }
       }
     `,
-    props.query,
+    props.post,
   );
 
-  const renderComment = useCallback(
-    ({ edge, ref }) => <CommentCard key={edge.node.id} query={edge.node} ref={ref} />,
-    [],
-  );
+  const hasNext = useMemo(() => (isPaginationEnabled ? _hasNext : false), [isPaginationEnabled, _hasNext]);
 
-  const comments = useMemo(
-    () => (shouldEnablePagination ? [] : data.comments?.edges!.slice(0, 3).map((edge) => renderComment({ edge }))),
-    [data.comments?.edges, renderComment, shouldEnablePagination],
-  );
+  const loadNext = useCallback(() => {
+    if (isPaginationEnabled) {
+      return _loadNext;
+    } else {
+      return null;
+    }
+  }, [isPaginationEnabled, _loadNext]);
 
   if (!data.comments?.edges) {
     return null;
   }
 
-  if (!shouldEnablePagination) {
-    return <Flex>{comments.length > 0 ? comments : 'No comments'}</Flex>;
-  }
-
   return (
     <Flex>
       <InfiniteScroll
-        data={data.comments.edges as any}
-        renderItem={renderComment}
+        data={data.comments.edges}
+        renderItem={({ edge, ref }) => (
+          <CommentCard key={edge!.node!.id} comment={edge!.node!} ref={ref as ForwardedRef<HTMLDivElement>} />
+        )}
         loadNext={loadNext}
         hasNext={hasNext}
         isLoading={isLoadingNext}

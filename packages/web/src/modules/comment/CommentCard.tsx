@@ -14,23 +14,23 @@ const commentCss = css`
   background: #f5f5f5;
 `;
 
-interface CommentCardProps {
-  query: CommentCard_Comment$key;
-}
+type CommentCardProps = {
+  comment: CommentCard_Comment$key;
+};
 
 const CommentCard = (props: CommentCardProps, ref: React.ForwardedRef<HTMLDivElement>) => {
-  const data = useFragment<CommentCard_Comment$key>(
+  const comment = useFragment(
     graphql`
       fragment CommentCard_Comment on Comment {
         body
       }
     `,
-    props.query,
+    props.comment,
   );
 
   return (
     <Flex css={commentCss} ref={ref}>
-      <Text>{data.body}</Text>
+      <Text>{comment.body}</Text>
     </Flex>
   );
 };

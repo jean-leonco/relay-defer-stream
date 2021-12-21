@@ -1,22 +1,22 @@
-import React, { useCallback } from 'react';
-import { css } from 'styled-components';
+import React, { ForwardedRef } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
+import { css } from 'styled-components';
 
 import Flex from '../common/Flex';
-import Text from '../common/Text';
 import InfiniteScroll from '../common/InfiniteScroll';
+import Text from '../common/Text';
 
-import PostCard from './PostCard';
-import { PostListPaginationQuery } from './__generated__/PostListPaginationQuery.graphql';
 import { PostList_query$key } from './__generated__/PostList_query.graphql';
+import { PostListPaginationQuery } from './__generated__/PostListPaginationQuery.graphql';
+import PostCard from './PostCard';
 
 const containerCss = css`
   width: 100%;
 `;
 
-interface PostListProps {
+type PostListProps = {
   query: PostList_query$key;
-}
+};
 
 const PostList = ({ query }: PostListProps) => {
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<PostListPaginationQuery, PostList_query$key>(
@@ -37,8 +37,6 @@ const PostList = ({ query }: PostListProps) => {
     query,
   );
 
-  const renderPost = useCallback(({ edge, ref }) => <PostCard key={edge.node.id} query={edge.node} ref={ref} />, []);
-
   if (!data.posts?.edges) {
     return <Text>Unable to fetch posts</Text>;
   }
@@ -46,8 +44,10 @@ const PostList = ({ query }: PostListProps) => {
   return (
     <Flex align="center" css={containerCss}>
       <InfiniteScroll
-        data={data.posts.edges as any}
-        renderItem={renderPost}
+        data={data.posts.edges}
+        renderItem={({ edge, ref }) => (
+          <PostCard key={edge!.node!.id} post={edge!.node!} ref={ref as ForwardedRef<HTMLAnchorElement>} />
+        )}
         loadNext={loadNext}
         hasNext={hasNext}
         isLoading={isLoadingNext}

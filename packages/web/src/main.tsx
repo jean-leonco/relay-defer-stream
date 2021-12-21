@@ -1,14 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { RelayEnvironmentProvider } from 'react-relay';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { RelayEnvironmentProvider } from 'react-relay';
-
-import { environment } from './relay';
-
-import theme from './modules/common/theme';
 
 import App from './App';
+import theme from './modules/common/theme';
+import { environment } from './relay';
 
 ReactDOM.render(
   <React.StrictMode>

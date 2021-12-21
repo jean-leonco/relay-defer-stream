@@ -4,20 +4,21 @@ import DataLoader from 'dataloader';
 type Loader<T> = () => DataLoader<DataLoaderKey, T>;
 
 const loaders: {
-  [key: string]: Loader<any>;
+  [key: string]: Loader<unknown>;
 } = {};
 
-const registerLoader = <T>(key: string, getLoader: Loader<T>) => {
-  loaders[key] = getLoader as any;
+const registerLoader = <T>(key: string, getLoader: Loader<T>): void => {
+  loaders[key] = getLoader;
 };
 
-const getDataloaders = () =>
-  Object.keys(loaders).reduce(
+const getDataloaders = (): Record<string, DataLoader<DataLoaderKey, unknown>> => {
+  return Object.keys(loaders).reduce(
     (prev, loaderKey) => ({
       ...prev,
       [loaderKey]: loaders[loaderKey](),
     }),
     {},
-  ) as any;
+  );
+};
 
 export { registerLoader, getDataloaders };

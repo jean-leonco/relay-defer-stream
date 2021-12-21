@@ -5,18 +5,18 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.27.0",
-    "@typescript-eslint/parser": "^4.27.0",
-    "eslint": "^7.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.0.7",
-    "eslint-plugin-relay": "^1.8.2"
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-relay": "^1.8.3"
   },
   "devDependencies": {
-    "prettier": "^2.3.1"
+    "prettier": "^2.5.1"
   }
 }

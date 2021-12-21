@@ -1,6 +1,6 @@
 import React, { Suspense, useMemo } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import { css } from 'styled-components';
-import { Routes, Route } from 'react-router-dom';
 
 import Flex from './modules/common/Flex';
 import Text from './modules/common/Text';

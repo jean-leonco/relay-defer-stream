@@ -1,17 +1,17 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
-import { globalIdField, connectionDefinitions } from 'graphql-relay';
+import { connectionArgs, timestampResolver, withFilter } from '@entria/graphql-mongo-helpers';
 import faker from 'faker';
-import { timestampResolver, withFilter, connectionArgs } from '@entria/graphql-mongo-helpers';
+import { GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { connectionDefinitions, globalIdField } from 'graphql-relay';
 
 import { nodeInterface, registerTypeLoader } from '../../loader/typeRegister';
 
 import { GraphQLContext } from '../../types';
 
-import { CommentConnection } from '../comment/CommentType';
 import CommentLoader from '../comment/CommentLoader';
+import { CommentConnection } from '../comment/CommentType';
 
-import { IPost } from './PostModel';
 import PostLoader from './PostLoader';
+import { IPost } from './PostModel';
 
 const PostType = new GraphQLObjectType<IPost, GraphQLContext>({
   name: 'Post',

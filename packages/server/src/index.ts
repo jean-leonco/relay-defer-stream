@@ -2,8 +2,8 @@
 
 import { createServer } from 'http';
 
-import { connectDatabase } from './database';
 import app from './app';
+import { connectDatabase } from './database';
 
 const runServer = async () => {
   try {

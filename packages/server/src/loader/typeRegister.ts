@@ -1,17 +1,19 @@
 import { GraphQLNamedOutputType } from 'graphql';
 import { fromGlobalId, nodeDefinitions } from 'graphql-relay';
 
-type Load = (ctx: any, id: string) => any;
+import { GraphQLContext } from '../types';
 
-interface TypeLoader {
+type Load<T> = (ctx: GraphQLContext, id: string) => T;
+
+type TypeLoader<T = unknown> = {
   type: GraphQLNamedOutputType;
-  load: Load;
-}
+  load: Load<T>;
+};
 
 const getTypeRegister = () => {
   const typesLoaders = new Map<string, TypeLoader>();
 
-  const registerTypeLoader = (type: GraphQLNamedOutputType, load: Load) => {
+  const registerTypeLoader = <T>(type: GraphQLNamedOutputType, load: Load<T>) => {
     typesLoaders.set(type.name as string, {
       type,
       load,
@@ -20,7 +22,7 @@ const getTypeRegister = () => {
     return type;
   };
 
-  const { nodeField, nodeInterface } = nodeDefinitions(
+  const { nodeField, nodeInterface } = nodeDefinitions<GraphQLContext>(
     (globalId, ctx) => {
       const { type, id } = fromGlobalId(globalId);
 

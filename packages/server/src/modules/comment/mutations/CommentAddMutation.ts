@@ -1,15 +1,14 @@
-import { GraphQLString, GraphQLNonNull, GraphQLID } from 'graphql';
-import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 import { errorField, getObjectId, successField } from '@entria/graphql-mongo-helpers';
-
-import { GraphQLContext } from '../../../types';
+import { GraphQLID, GraphQLNonNull, GraphQLString } from 'graphql';
+import { mutationWithClientMutationId, toGlobalId } from 'graphql-relay';
 
 import pubSub, { EVENTS } from '../../../pubSub';
+import { GraphQLContext } from '../../../types';
 
 import PostLoader from '../../post/PostLoader';
 
-import CommentModel from '../CommentModel';
 import CommentLoader from '../CommentLoader';
+import CommentModel from '../CommentModel';
 import { CommentConnection } from '../CommentType';
 
 interface CommentAddMutationArgs {

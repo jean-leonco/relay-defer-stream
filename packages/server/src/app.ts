@@ -2,15 +2,15 @@
 
 import { PassThrough } from 'stream';
 
-import Koa from 'koa';
 import cors from '@koa/cors';
+import Router from '@koa/router';
+import { getGraphQLParameters, processRequest, renderGraphiQL, shouldRenderGraphiQL } from 'graphql-helix';
+import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
-import Router from '@koa/router';
-import { getGraphQLParameters, processRequest, shouldRenderGraphiQL, renderGraphiQL } from 'graphql-helix';
 
-import schema from './schema/schema';
 import { getDataloaders } from './loader/loaderRegister';
+import schema from './schema/schema';
 
 const app = new Koa();
 const router = new Router();

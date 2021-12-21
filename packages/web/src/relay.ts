@@ -1,6 +1,6 @@
-import { Environment, Network, RecordSource, Store, Observable, FetchFunction, PayloadData } from 'relay-runtime';
 import { ExecutionPatchResult } from 'graphql';
 import { meros } from 'meros/browser';
+import { Environment, FetchFunction, Network, Observable, PayloadData, RecordSource, Store } from 'relay-runtime';
 
 const fetchFn: FetchFunction = (params, variables) => {
   return Observable.create((sink) => {
@@ -43,7 +43,7 @@ function isAsyncIterable(input: unknown): input is AsyncIterable<unknown> {
     input !== null &&
     // Some browsers still don't have Symbol.asyncIterator implemented (iOS Safari)
     // That means every custom AsyncIterable must be built using a AsyncGeneratorFunction (async function * () {})
-    ((input as any)[Symbol.toStringTag] === 'AsyncGenerator' || Symbol.asyncIterator in input)
+    (input[Symbol.toStringTag] === 'AsyncGenerator' || Symbol.asyncIterator in input)
   );
 }
 

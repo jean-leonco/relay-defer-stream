@@ -1,26 +1,28 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { ForwardedRef, ReactElement, useCallback, useMemo, useRef } from 'react';
 
 import Text from './Text';
 
-interface RenderItemProps {
-  edge: any;
+export type RenderItemProps<TEdge> = {
+  edge: TEdge;
   index: number;
-  ref: ((node: Element) => void) | null;
-}
+  ref: ForwardedRef<Element> | null;
+};
 
-interface InfiniteScrollProps {
-  data: any[];
-  renderItem(props: RenderItemProps): JSX.Element;
+export type RenderItemFn<TEdge> = (props: RenderItemProps<TEdge>) => ReactElement;
+
+type InfiniteScrollProps<TEdge> = {
+  data: TEdge[] | readonly TEdge[];
+  renderItem: RenderItemFn<TEdge>;
   loadNext(first: number): void;
   hasNext: boolean;
   isLoading: boolean;
-}
+};
 
-const InfiniteScroll = ({ data, renderItem, loadNext, hasNext, isLoading }: InfiniteScrollProps) => {
+function InfiniteScroll<TEdge>({ data, renderItem, loadNext, hasNext, isLoading }: InfiniteScrollProps<TEdge>) {
   const observer = useRef<IntersectionObserver>();
 
-  const lastItemRef = useCallback(
-    (node: Element) => {
+  const lastItemRef: ForwardedRef<Element> = useCallback(
+    (node: Element | null) => {
       if (observer.current) {
         observer.current.disconnect();
       }
@@ -44,7 +46,7 @@ const InfiniteScroll = ({ data, renderItem, loadNext, hasNext, isLoading }: Infi
   );
 
   const renderCard = useCallback(
-    (edge: any, index: number) => {
+    (edge: TEdge, index: number) => {
       const node = renderItem({
         edge,
         index,
@@ -64,6 +66,6 @@ const InfiniteScroll = ({ data, renderItem, loadNext, hasNext, isLoading }: Infi
       {isLoading && <Text>Loading...</Text>}
     </>
   );
-};
+}
 
 export default InfiniteScroll;

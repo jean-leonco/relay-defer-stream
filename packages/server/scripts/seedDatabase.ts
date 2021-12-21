@@ -3,8 +3,8 @@ import faker from 'faker';
 
 import { connectDatabase } from '../src/database';
 
-import PostModel from '../src/modules/post/PostModel';
 import CommentModel from '../src/modules/comment/CommentModel';
+import PostModel from '../src/modules/post/PostModel';
 
 const runScript = async () => {
   const posts = 50;

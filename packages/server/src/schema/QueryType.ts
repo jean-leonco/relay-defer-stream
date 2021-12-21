@@ -1,10 +1,10 @@
-import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 import { connectionArgs } from '@entria/graphql-mongo-helpers';
+import { GraphQLNonNull, GraphQLObjectType } from 'graphql';
 
 import { nodeField } from '../loader/typeRegister';
 
-import { PostConnection } from '../modules/post/PostType';
 import PostLoader from '../modules/post/PostLoader';
+import { PostConnection } from '../modules/post/PostType';
 
 const QueryType = new GraphQLObjectType({
   name: 'Query',

@@ -1,6 +1,6 @@
+import { timestampResolver } from '@entria/graphql-mongo-helpers';
 import { GraphQLObjectType, GraphQLString } from 'graphql';
 import { connectionDefinitions, globalIdField } from 'graphql-relay';
-import { timestampResolver } from '@entria/graphql-mongo-helpers';
 
 import { nodeInterface, registerTypeLoader } from '../../loader/typeRegister';
 
@@ -9,8 +9,8 @@ import { GraphQLContext } from '../../types';
 import PostLoader from '../post/PostLoader';
 import PostType from '../post/PostType';
 
-import { IComment } from './CommentModel';
 import CommentLoader from './CommentLoader';
+import { IComment } from './CommentModel';
 
 const CommentType = new GraphQLObjectType<IComment, GraphQLContext>({
   name: 'Comment',

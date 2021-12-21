@@ -4,8 +4,8 @@ import { registerLoader } from '../../loader/loaderRegister';
 
 import { GraphQLContext } from '../../types';
 
-import CommentModel, { IComment } from './CommentModel';
 import { commentFilterMapping } from './CommentFilterInputType';
+import CommentModel, { IComment } from './CommentModel';
 
 const CommentLoader = createLoader<GraphQLContext, 'CommentLoader', IComment>({
   model: CommentModel,

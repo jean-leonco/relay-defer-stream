@@ -1,5 +1,5 @@
 import React, { DetailedHTMLProps, HTMLAttributes, PropsWithoutRef, ReactNode } from 'react';
-import styled, { DefaultTheme, FlattenInterpolation, ThemedStyledProps } from 'styled-components';
+import styled, { DefaultTheme, FlattenInterpolation, FlattenSimpleInterpolation, ThemeProps } from 'styled-components';
 
 const Container = styled.div<FlexProps>`
   display: flex;
@@ -10,14 +10,16 @@ const Container = styled.div<FlexProps>`
   ${(p) => p.css}
 `;
 
-export interface FlexProps extends PropsWithoutRef<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>> {
+type DivPropsWithoutRef = PropsWithoutRef<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>;
+
+type FlexProps = DivPropsWithoutRef & {
   direction?: 'column' | 'row';
   justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around' | 'space-evenly';
   align?: 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline';
   flex?: number;
   children?: ReactNode;
-  css?: FlattenInterpolation<ThemedStyledProps<any, DefaultTheme>>;
-}
+  css?: FlattenSimpleInterpolation | FlattenInterpolation<ThemeProps<DefaultTheme>>;
+};
 
 const Flex = ({ children, direction = 'column', ...props }: FlexProps, ref: React.ForwardedRef<HTMLDivElement>) => {
   return (

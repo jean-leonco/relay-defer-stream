@@ -3,11 +3,10 @@ import { graphql, useLazyLoadQuery } from 'react-relay';
 import { useParams } from 'react-router-dom';
 import { css } from 'styled-components';
 
+import CommentList from '../comment/CommentList';
 import Flex from '../common/Flex';
 import Space from '../common/Space';
 import Text from '../common/Text';
-
-import CommentList from '../comment/CommentList';
 
 import { PostQuery } from './__generated__/PostQuery.graphql';
 
@@ -26,7 +25,7 @@ const spacerCss = css`
 `;
 
 const Post = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
 
   const { post } = useLazyLoadQuery<PostQuery>(
     graphql`
@@ -39,7 +38,7 @@ const Post = () => {
         }
       }
     `,
-    { id },
+    { id: id! },
   );
 
   if (!post) {
@@ -56,7 +55,7 @@ const Post = () => {
         <Text size="label" weight="semiBold">
           Comments:
         </Text>
-        <CommentList query={post} />
+        <CommentList post={post} />
       </Suspense>
     </Flex>
   );
