@@ -8,7 +8,9 @@ import App from './App';
 import theme from './modules/common/theme';
 import { environment } from './relay';
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+root.render(
   <StrictMode>
     <RelayEnvironmentProvider environment={environment}>
       <ThemeProvider theme={theme}>
@@ -18,5 +20,4 @@ ReactDOM.render(
       </ThemeProvider>
     </RelayEnvironmentProvider>
   </StrictMode>,
-  document.getElementById('root'),
 );

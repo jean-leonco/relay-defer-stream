@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { startTransition, useCallback } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 
 import Flex from '../common/Flex';
@@ -36,7 +36,9 @@ const CommentList = ({ isPaginationEnabled = true, ...props }: CommentListProps)
       return;
     }
 
-    loadNext(3);
+    startTransition(() => {
+      loadNext(3);
+    });
   }, [hasNext, isLoadingNext, isPaginationEnabled, loadNext]);
 
   if (!data.comments?.edges) {

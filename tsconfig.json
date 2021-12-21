@@ -15,7 +15,8 @@
     "rootDirs": ["src"],
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": ["react/next", "react-dom/next"]
   },
   "exclude": ["node_modules", "build"]
 }

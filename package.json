@@ -18,6 +18,9 @@
     "update": "yarn server update-schema && yarn web relay",
     "web": "yarn workspace @workspace/web"
   },
+  "resolutions": {
+    "@types/relay-runtime": "12.0.1"
+  },
   "devDependencies": {
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",

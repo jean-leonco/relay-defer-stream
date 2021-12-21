@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { startTransition, useCallback } from 'react';
 import { graphql, usePaginationFragment } from 'react-relay';
 import { css } from 'styled-components';
 
@@ -42,7 +42,9 @@ const PostList = ({ query }: PostListProps) => {
       return;
     }
 
-    loadNext(10);
+    startTransition(() => {
+      loadNext(10);
+    });
   }, [hasNext, isLoadingNext, loadNext]);
 
   if (!data.posts?.edges) {
